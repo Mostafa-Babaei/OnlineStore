@@ -16,7 +16,7 @@ namespace OnlineStore.api.Controllers
             this.categoryService = categoryService;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet(Name = "Category")]
         public List<MainMenu> Get()
         {
             return categoryService.GetAllCategory();

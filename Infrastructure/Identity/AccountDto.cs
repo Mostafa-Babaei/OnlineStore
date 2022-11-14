@@ -12,6 +12,16 @@ namespace infrastructure.Identity
     {
     }
 
+    public class LoginApi
+    {
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        [Display(Name = "نام کاربری")]
+        public string UserName { get; set; }
+
+        [Display(Name = "کلمه عبور")]
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        public string Password { get; set; }
+    }
     public class LoginDto
     {
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]

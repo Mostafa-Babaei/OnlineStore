@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="Persistence\Migrations\**" />
+    <Compile Remove="Service\Communication\**" />
     <EmbeddedResource Remove="Persistence\Migrations\**" />
+    <EmbeddedResource Remove="Service\Communication\**" />
     <None Remove="Persistence\Migrations\**" />
+    <None Remove="Service\Communication\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +44,6 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="Service\Communication\" />
   </ItemGroup>
 
 </Project>

@@ -8,5 +8,6 @@ namespace Domain.Entities
         public DateTime CreateAt { get; set; } 
         public DateTime? ModifyDate { get; set; } = DateTime.Now;
         public string UserId { get; set; }
+        public bool IsEnable { get; set; }
     }
 }

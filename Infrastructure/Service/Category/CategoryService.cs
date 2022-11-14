@@ -10,13 +10,13 @@ namespace infrastructure.Service
 {
     class CategoryService : ICategoryService
     {
-        private readonly IGenericRepository<MainMenu> categoryRepository;
+        private readonly IGenericRepository<Category> categoryRepository;
 
-        public CategoryService(IGenericRepository<MainMenu> categoryRepository)
+        public CategoryService(IGenericRepository<Category> categoryRepository)
         {
             this.categoryRepository = categoryRepository;
         }
-        public ApiResult EditCategory(MainMenu tag)
+        public ApiResult EditCategory(Category tag)
         {
             throw new NotImplementedException();
         }
@@ -28,17 +28,17 @@ namespace infrastructure.Service
             return true;
         }
 
-        public List<MainMenu> GetAllCategory()
+        public List<Category> GetAllCategory()
         {
             return categoryRepository.GetAll().ToList();
         }
 
-        public MainMenu GetCategory(int id)
+        public Category GetCategory(int id)
         {
             return categoryRepository.GetById(id);
         }
 
-        public ApiResult InsertCategory(MainMenu model)
+        public ApiResult InsertCategory(Category model)
         {
             var result = categoryRepository.Add(model);
             if (result <= 0)

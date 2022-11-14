@@ -9,10 +9,10 @@ namespace infrastructure.Service
 {
     public interface ICategoryService
     {
-        List<MainMenu> GetAllCategory();
-        MainMenu GetCategory(int id);
-        ApiResult InsertCategory(MainMenu model);
-        ApiResult EditCategory(MainMenu tag);
+        List<Category> GetAllCategory();
+        Category GetCategory(int id);
+        ApiResult InsertCategory(Category model);
+        ApiResult EditCategory(Category tag);
         ApiResult RemoveCategory(int id);
         bool ExistCategory(string category);
     }

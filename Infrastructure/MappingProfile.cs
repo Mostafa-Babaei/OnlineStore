@@ -11,6 +11,11 @@ namespace infrastructure
     {
         public MappingProfile()
         {
+            #region Category Mapping
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Category, InsertCategoryDto>().ReverseMap();
+            CreateMap<Category, EditCategoryDto>().ReverseMap();
+            #endregion
 
             CreateMap<Contact, ContactPageDto>().ReverseMap();
             CreateMap<Contact, InsertContactDto>().ReverseMap();
@@ -18,7 +23,6 @@ namespace infrastructure
 
             CreateMap<ApplicationUser, EditUserDto>().ReverseMap();
 
-            CreateMap<MainMenu, CategoryDto>().ReverseMap();
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Product, InsertProductDto>().ReverseMap();
             CreateMap<Product, EditProductDto>().ReverseMap();

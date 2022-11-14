@@ -1,4 +1,5 @@
-﻿using infrastructure.Identity;
+﻿using Application.Common.Model;
+using infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,12 +13,13 @@ namespace OnlineStore.api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-private readonly IConfiguration configuration;
+        private readonly IConfiguration configuration;
 
         public AuthController(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
+
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginApi user)
         {
@@ -27,6 +29,9 @@ private readonly IConfiguration configuration;
             }
             if (user.UserName == "string" && user.Password == "string")
             {
+                if (configuration["Jwt:Key"] == null)
+                    return Unauthorized();
+
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                 var tokeOptions = new JwtSecurityToken(
@@ -37,10 +42,29 @@ private readonly IConfiguration configuration;
                     signingCredentials: signinCredentials
                 );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                return Ok(new AuthenticatedResponse { Token = tokenString });
+                return Ok(tokenString);
             }
             return Unauthorized();
         }
+
+        [HttpPost("register")]
+        public ApiResult Registe([FromBody] LoginApi user)
+        {
+            return ApiResult.ToSuccessModel("");
+        }
+
+        [HttpPost("forget-password")]
+        public ApiResult ForgetPassword([FromBody] LoginApi user)
+        {
+            return ApiResult.ToSuccessModel("");
+        }
+
+        [HttpPost("change-password")]
+        public ApiResult ChangePassword([FromBody] LoginApi user)
+        {
+            return ApiResult.ToSuccessModel("");
+        }
+
 
     }
 }

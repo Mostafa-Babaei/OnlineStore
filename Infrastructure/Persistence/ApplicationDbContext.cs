@@ -14,8 +14,6 @@ namespace infrastructure.Data
         }
         #region Public
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<MainMenu> MainMenus { get; set; }
-
         #endregion
 
 
@@ -33,7 +31,7 @@ namespace infrastructure.Data
         #endregion
 
 
-        public DbSet<MainMenu> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

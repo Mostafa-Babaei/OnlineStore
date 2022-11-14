@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Application.Common.Model;
+using Application.Constant.Message;
+using Domain.Entities;
 using infrastructure.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +18,47 @@ namespace OnlineStore.api.Controllers
             this.categoryService = categoryService;
         }
 
-        [HttpGet(Name = "Category")]
-        public List<MainMenu> Get()
+        /// <summary>
+        /// دریافت دسته بندی های محصول
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(Name = "get")]
+        public ApiResult Get()
         {
-            return categoryService.GetAllCategory();
+            try
+            {
+                return ApiResult.ToSuccessModel(CategoryMessages.ReceivedCategoriesSuccess, categoryService.GetAllCategory());
+            }
+            catch (Exception)
+            {
+                return ApiResult.ToErrorModel(CategoryMessages.ReceivedCategoriesFailure);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost(Name = "add")]
+        public ApiResult AddCategory()
+        {
+            return ApiResult.ToSuccessModel(CommonMessage.AddedDataSuccess);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut(Name = "edit")]
+        public ApiResult EditCategory()
+        {
+            return ApiResult.ToSuccessModel(CommonMessage.EditedDataSuccess);
+        }
+
+        [HttpDelete(Name = "delete")]
+        public ApiResult DeleteCategory()
+        {
+            return ApiResult.ToSuccessModel(CommonMessage.DeletedDataSuccess);
         }
     }
 }

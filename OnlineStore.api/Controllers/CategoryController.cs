@@ -1,5 +1,6 @@
 ﻿using Application.Common.Model;
 using Application.Constant.Message;
+using Application.Model;
 using Domain.Entities;
 using infrastructure.Service;
 using Microsoft.AspNetCore.Http;
@@ -40,9 +41,9 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost(Name = "add")]
-        public ApiResult AddCategory()
+        public ApiResult AddCategory([FromBody] InsertCategoryDto categoryMOdel)
         {
-            return ApiResult.ToSuccessModel(CommonMessage.AddedDataSuccess);
+            return categoryService.InsertCategory(categoryMOdel);
         }
 
         /// <summary>

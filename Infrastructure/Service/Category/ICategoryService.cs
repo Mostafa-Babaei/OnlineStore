@@ -11,7 +11,7 @@ namespace infrastructure.Service
     {
         List<Category> GetAllCategory();
         Category GetCategory(int id);
-        ApiResult InsertCategory(Category model);
+        ApiResult InsertCategory(InsertCategoryDto model);
         ApiResult EditCategory(Category tag);
         ApiResult RemoveCategory(int id);
         bool ExistCategory(string category);

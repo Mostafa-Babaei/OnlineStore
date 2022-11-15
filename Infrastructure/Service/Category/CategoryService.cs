@@ -8,7 +8,7 @@ using infrastructure.Repository;
 
 namespace infrastructure.Service
 {
-    class CategoryService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly IGenericRepository<Category> categoryRepository;
 

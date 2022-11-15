@@ -16,5 +16,6 @@ namespace Application.Constant.Message
         public const string DeletedDataFailure = " خطا در حذف اطلاعات";
         public const string AddedDataSuccess = " ثبت اطلاعات با موفقت دریافت شد";
         public const string AddedDataFailure = " خطا در ثبت اطلاعات";
+        public const string UnhandledError = " خطا پیش بینی نشده";
     }
 }

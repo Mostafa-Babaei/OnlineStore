@@ -1,12 +1,12 @@
 ﻿using infrastructure.Data;
+using infrastructure.Identity;
+using infrastructure.Models;
+using infrastructure.Repository;
+using infrastructure.Service;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppFramework.ServicesConfiguration
 {
@@ -18,5 +18,37 @@ namespace AppFramework.ServicesConfiguration
               options.UseSqlServer(
                   Configuration.GetConnectionString("DefaultConnection")));
         }
+
+        public static void AddIdentityService(this IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.User.RequireUniqueEmail = true;
+            }).AddErrorDescriber<CustomIdentityErrorDescriber>()
+                .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+        }
+
+
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+
+            services.AddScoped<IIdentityService, IdentityService>();
+
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IContactService, ContactService>();
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+
+            return services;
+        }
+
     }
 }

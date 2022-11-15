@@ -1,4 +1,6 @@
 ﻿using AppFramework.ServicesConfiguration;
+using AutoMapper;
+using infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -34,6 +36,16 @@ ConfigurationManager configuration = builder.Configuration;
 
 //کانفیگ کانتکس
 builder.Services.AddDbContextConfiguration(configuration);
+builder.Services.AddIdentityService();
+builder.Services.AddServices();
+
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+
+builder.Services.AddSingleton(mapper);
 
 //کانفیگ jwt
 //builder.Services.AddAuthentication(opt =>

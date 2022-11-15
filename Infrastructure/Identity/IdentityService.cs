@@ -17,20 +17,18 @@ namespace infrastructure.Identity
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> signManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+        //private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
         public IdentityService(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signManager,
-        RoleManager<IdentityRole> roleManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory)
+        RoleManager<IdentityRole> roleManager)
+        //IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory)
         {
             _userManager = userManager;
             this.signManager = signManager;
             this.roleManager = roleManager;
-            _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
+            //_userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         }
-
-
 
         public async Task<string> GetUserNameAsync(string userId)
         {
@@ -67,7 +65,7 @@ namespace infrastructure.Identity
                 return ApiResult.ToErrorModel("خطا در ثبت کاربر", errors);
             }
 
-            return new ApiResult() { IsSuccess = result.Succeeded, Message = "", Data = user };
+            return new ApiResult() { IsSuccess = result.Succeeded, Message = "ثبت نام کاربر با موفقیت انجام شد", Data = user.Id };
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
@@ -317,11 +315,11 @@ namespace infrastructure.Identity
                         EmailConfirmed = true
                     };
 
-                     _userManager.CreateAsync(user);
+                    _userManager.CreateAsync(user);
                 }
 
-                 _userManager.AddLoginAsync(user, checkLogin);
-                 signManager.SignInAsync(user, false);
+                _userManager.AddLoginAsync(user, checkLogin);
+                signManager.SignInAsync(user, false);
 
                 return ApiResult.ToSuccessModel("کاربر با موفقیت ثبت شد");
             }

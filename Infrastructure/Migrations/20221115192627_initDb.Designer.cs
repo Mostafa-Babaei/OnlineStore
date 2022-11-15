@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using infrastructure.Data;
 
@@ -11,9 +12,10 @@ using infrastructure.Data;
 namespace infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221115192627_initDb")]
+    partial class initDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,24 +333,6 @@ namespace infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "b74ddd14-6340-4840-95c2-db12554843e5",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "e2a91ea9-b6ed-4c71-ab4b-6c42499068ba",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = false,
-                            IsActive = false,
-                            LockoutEnabled = false,
-                            PhoneNumber = "1234567890",
-                            PhoneNumberConfirmed = false,
-                            RegisterAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "a44ba30c-e512-48c0-be21-6851958ee91b",
-                            TwoFactorEnabled = false,
-                            UserName = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -463,13 +447,6 @@ namespace infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "b74ddd14-6340-4840-95c2-db12554843e5",
-                            RoleId = "fab4fac1-c546-41de-aebc-a14da6895711"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

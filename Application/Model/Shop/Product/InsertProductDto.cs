@@ -12,8 +12,10 @@ namespace Application.Model
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
         public string Title { get; set; }
 
+        [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
+        [Display(Name = "وضعیت محصول")]
         public bool IsActive { get; set; }
 
         [Display(Name = "تعداد")]
@@ -22,11 +24,11 @@ namespace Application.Model
 
         [Display(Name = "مبلغ")]
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
-        public long Price { get; set; }
+        public int Price { get; set; }
 
 
         [Display(Name = "دسته بندی محصول")]
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
-        public int ProductTypeId { get; set; }
+        public int CategoryId { get; set; }
     }
 }

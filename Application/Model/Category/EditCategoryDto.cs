@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Application.Model
 {
+    /// <summary>
+    /// ویرایش دسته بندی
+    /// </summary>
     public class EditCategoryDto
     {
         public int Id { get; set; }

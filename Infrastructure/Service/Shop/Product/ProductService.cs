@@ -59,6 +59,7 @@ namespace infrastructure.Service
                 product.ProductId = model.ProductId;
                 product.IsActive = model.IsActive;
                 product.CategoryId = model.CategoryId;
+                product.BrandId = model.BrandId;
                 product.Description = model.Description;
                 product.Title = model.Title;
 
@@ -166,7 +167,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در ثبت محصول");
-                    return ApiResult.ToErrorModel("خطا در ثبت محصول");
+                return ApiResult.ToErrorModel("خطا در ثبت محصول");
             }
         }
 
@@ -183,7 +184,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "");
-                    return ApiResult.ToErrorModel("خطا در ثبت محصول");
+                return ApiResult.ToErrorModel("خطا در ثبت محصول");
             }
         }
     }

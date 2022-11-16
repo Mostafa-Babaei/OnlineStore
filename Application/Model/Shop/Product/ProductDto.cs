@@ -35,5 +35,11 @@ namespace Application.Model
 
         [Display(Name = "نام دسته بندی")]
         public int CategoryName { get; set; }
+
+        [Display(Name = "برند محصول")]
+        public int BrandId { get; set; }
+
+        [Display(Name = "نام دسته بندی")]
+        public int BrandName { get; set; }
     }
 }

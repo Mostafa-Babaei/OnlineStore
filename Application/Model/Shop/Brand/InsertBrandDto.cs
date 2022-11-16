@@ -9,7 +9,7 @@ namespace Application.Model
     {
         public string BrandName { get; set; }
         public string Logo { get; set; }
-        public IFormFile ImageOfBrand { get; set; }
+        public IFormFile? ImageOfBrand { get; set; }
         public bool IsActive { get; set; }
     }
 }

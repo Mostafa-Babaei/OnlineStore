@@ -36,6 +36,11 @@ namespace Application.Model
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
         public int CategoryId { get; set; }
 
+
+        [Display(Name = "برند محصول")]
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        public int BrandId { get; set; }
+
         public List<SelectListItem> ListOfCategory { get; set; }
 
     }

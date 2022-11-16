@@ -39,7 +39,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ApiResult AddCategory([FromBody] InsertBrandDto brandmo)
+        public ApiResult AddBrand([FromBody] InsertBrandDto brandmo)
         {
             return brandService.InsertBrand(brandmo);
         }
@@ -49,7 +49,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public ApiResult EditCategory([FromBody] EditBrandDto brand)
+        public ApiResult EditBrand([FromBody] EditBrandDto brand)
         {
             return brandService.UpdateBrand(brand);
         }
@@ -60,7 +60,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        public ApiResult DeleteCategory(int id)
+        public ApiResult DeleteBrand(int id)
         {
             return brandService.DeleteBrand(id);
         }

@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="Common\Interfaces\" />
     <Folder Include="Interface\" />
+    <Folder Include="Model\ShoppingCart\" />
   </ItemGroup>
 
   <ItemGroup>

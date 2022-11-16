@@ -1,4 +1,6 @@
-﻿using infrastructure.Data;
+﻿using AutoMapper;
+using infrastructure;
+using infrastructure.Data;
 using infrastructure.Identity;
 using infrastructure.Models;
 using infrastructure.Repository;
@@ -49,5 +51,14 @@ namespace AppFramework.ServicesConfiguration
             return services;
         }
 
+        public static void AutoMapperConfig(this IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+        }
     }
 }

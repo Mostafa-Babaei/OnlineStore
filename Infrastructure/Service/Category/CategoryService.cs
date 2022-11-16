@@ -13,7 +13,7 @@ namespace infrastructure.Service
 {
     public class CategoryService : ICategoryService
     {
-        //Todo:برای متن پیام ها متغییر ایجاد شود
+        //Todo:برای متن پیام ها متغیر ایجاد شود
         private readonly IGenericRepository<Category> categoryRepository;
         private readonly IMapper mapper;
         //private readonly ILogger logger;

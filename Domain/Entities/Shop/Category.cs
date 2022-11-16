@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    [Table("Category", Schema = "Shop")]
+    //[Table("Category", Schema = "Shop")]
     public class Category : BaseEntity
     {
         [Key]

@@ -20,6 +20,12 @@ namespace Domain.Models
         public int Quntity { get; set; }
         public long Price { get; set; }
 
+        /// <summary>
+        /// ارتباط با جدول  دسته بندی
+        /// </summary>
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public virtual Category Category { get; set; }
 
     }
 }

@@ -16,13 +16,13 @@ namespace infrastructure.Service
         //Todo:برای متن پیام ها متغییر ایجاد شود
         private readonly IGenericRepository<Category> categoryRepository;
         private readonly IMapper mapper;
-        private readonly ILogger logger;
+        //private readonly ILogger logger;
 
-        public CategoryService(IGenericRepository<Category> categoryRepository, IMapper mapper, ILogger logger)
+        public CategoryService(IGenericRepository<Category> categoryRepository, IMapper mapper)
         {
             this.categoryRepository = categoryRepository;
             this.mapper = mapper;
-            this.logger = logger;
+            //this.logger = logger;
         }
         public ApiResult EditCategory(EditCategoryDto model)
         {
@@ -47,7 +47,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "دریافت ویرایش دسته بندی");
+                //logger.LogError(ex, "دریافت ویرایش دسته بندی");
                 return ApiResult.ToErrorModel("خطا در ویرایش دسته بندی");
             }
         }
@@ -62,7 +62,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "دریافت بررسی دسته بندی");
+                //logger.LogError(ex, "دریافت بررسی دسته بندی");
                 return false;
             }
         }
@@ -77,7 +77,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "دریافت اطلاعات دسته بندی");
+                //logger.LogError(ex, "دریافت اطلاعات دسته بندی");
                 return categories;
             }
         }
@@ -92,7 +92,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "دریافت دسته بندی");
+                //logger.LogError(ex, "دریافت دسته بندی");
                 return category;
             }
         }
@@ -109,7 +109,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در ثبت دسته بندی");
+                //logger.LogError(ex, "خطا در ثبت دسته بندی");
                 return ApiResult.ToErrorModel("خطا در ثبت دسته بندی");
             }
         }
@@ -130,7 +130,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در حذف دسته بندی");
+                //logger.LogError(ex, "خطا در حذف دسته بندی");
                 return ApiResult.ToErrorModel("خطا در حذف دسته بندی");
             }
         }

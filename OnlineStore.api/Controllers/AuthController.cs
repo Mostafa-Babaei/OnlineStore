@@ -113,7 +113,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="changePasswordModel"></param>
         /// <returns></returns>
-        [HttpPost("change-password")]
+        [HttpPut("change-password")]
         [Authorize]
         public ApiResult ChangePassword([FromBody] ChangePasswordByUserDto changePasswordModel)
         {

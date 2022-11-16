@@ -14,14 +14,12 @@ namespace infrastructure.Service
     {
         private readonly IMapper mapper;
         private readonly IGenericRepository<Product> productRepository;
-        private readonly ILogger logger;
 
         public ProductService(
-            IMapper mapper, IGenericRepository<Product> productRepository, ILogger logger)
+            IMapper mapper, IGenericRepository<Product> productRepository)
         {
             this.mapper = mapper;
             this.productRepository = productRepository;
-            this.logger = logger;
         }
 
         public ApiResult changeStateProduct(int productId, bool? newState)
@@ -44,7 +42,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در تغییر وضعیت محصول");
+                //logger.LogError(ex, "خطا در تغییر وضعیت محصول");
                 return ApiResult.ToErrorModel("خطا در تغییر وضعیت محصول");
             }
         }
@@ -71,7 +69,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در ویرایش محصول");
+                //logger.LogError(ex, "خطا در ویرایش محصول");
                 return ApiResult.ToErrorModel("خطا در ویرایش محصول");
             }
         }
@@ -88,8 +86,8 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "");
-                throw;
+                //logger.LogError(ex, "");
+                return products;
             }
         }
 
@@ -105,7 +103,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در دریافت محصول");
+                //logger.LogError(ex, "خطا در دریافت محصول");
                 return products;
             }
         }
@@ -118,7 +116,7 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در دریافت محصول");
+                //logger.LogError(ex, "خطا در دریافت محصول");
                 return null;
             }
         }
@@ -134,8 +132,8 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در دریافت محصول");
-                throw;
+                //logger.LogError(ex, "خطا در دریافت محصول");
+                return product;
             }
         }
 
@@ -150,8 +148,8 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در دریافت محصول");
-                throw;
+                //logger.LogError(ex, "خطا در دریافت محصول");
+                return products;
             }
         }
 
@@ -167,12 +165,12 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "خطا در ثبت محصول");
-                throw;
+                //logger.LogError(ex, "خطا در ثبت محصول");
+                    return ApiResult.ToErrorModel("خطا در ثبت محصول");
             }
         }
 
-        public ApiResult RmoveProduct(int productId)
+        public ApiResult RemoveProduct(int productId)
         {
             try
             {
@@ -184,8 +182,8 @@ namespace infrastructure.Service
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "");
-                throw;
+                //logger.LogError(ex, "");
+                    return ApiResult.ToErrorModel("خطا در ثبت محصول");
             }
         }
     }

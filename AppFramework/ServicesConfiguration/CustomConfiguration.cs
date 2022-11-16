@@ -40,12 +40,11 @@ namespace AppFramework.ServicesConfiguration
         {
 
             services.AddScoped<IIdentityService, IdentityService>();
-
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IContactService, ContactService>();
-
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IBrandService, BrandService>();
 
             return services;
         }

@@ -49,7 +49,7 @@ namespace infrastructure.Service
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns>
-        ApiResult RmoveProduct(int productId);
+        ApiResult RemoveProduct(int productId);
 
         /// <summary>
         /// تغییر وضعیت محصول

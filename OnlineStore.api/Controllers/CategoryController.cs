@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineStore.api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace OnlineStore.api.Controllers
         /// دریافت دسته بندی های محصول
         /// </summary>
         /// <returns></returns>
-        [HttpGet(Name = "get")]
+        [HttpGet]
         public ApiResult Get()
         {
             try
@@ -40,7 +40,7 @@ namespace OnlineStore.api.Controllers
         /// افزودن دسته بندی جدید
         /// </summary>
         /// <returns></returns>
-        [HttpPost(Name = "add")]
+        [HttpPost]
         public ApiResult AddCategory([FromBody] InsertCategoryDto categoryMOdel)
         {
             return categoryService.InsertCategory(categoryMOdel);
@@ -50,7 +50,7 @@ namespace OnlineStore.api.Controllers
         /// ویرایش دسته بندی
         /// </summary>
         /// <returns></returns>
-        [HttpPut(Name = "edit")]
+        [HttpPut]
         public ApiResult EditCategory([FromBody] EditCategoryDto editCategoryDto)
         {
             return categoryService.EditCategory(editCategoryDto);
@@ -61,7 +61,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete(Name = "delete")]
+        [HttpDelete]
         public ApiResult DeleteCategory(int id)
         {
             return categoryService.RemoveCategory(id);

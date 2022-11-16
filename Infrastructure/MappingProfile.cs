@@ -27,6 +27,15 @@ namespace infrastructure
 
             #endregion
 
+
+            #region Brand mapping 
+
+            CreateMap<Brand, BrandDto>().ReverseMap();
+            CreateMap<Brand, InsertBrandDto>().ReverseMap();
+            CreateMap<Brand, EditBrandDto>().ReverseMap();
+
+            #endregion
+
             CreateMap<ApplicationUser, EditUserDto>().ReverseMap();
 
             CreateMap<Discount, DiscountDto>().ReverseMap();

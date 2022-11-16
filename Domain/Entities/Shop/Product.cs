@@ -27,5 +27,13 @@ namespace Domain.Models
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
+
+        /// <summary>
+        /// ارتباط با برند
+        /// </summary>
+        public int BrandId { get; set; }
+        [ForeignKey("BrandId")]
+        public virtual Brand Brand { get; set; }
+
     }
 }

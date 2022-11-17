@@ -35,5 +35,16 @@ namespace Domain.Models
         [ForeignKey("BrandId")]
         public virtual Brand Brand { get; set; }
 
+        /// <summary>
+        /// ارتباط با سفارش
+        /// </summary>
+        public virtual ICollection<ShopOrder> ShopOrders { get; set; }
+
+        /// <summary>
+        /// ارتباط با سبد خرید
+        /// </summary>
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
+
+
     }
 }

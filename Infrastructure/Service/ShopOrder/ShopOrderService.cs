@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace infrastructure.Service.Order
 {
-    public class OrderService : IOrder
+    public class ShopOrderService : IShopOrderService
     {
-        private readonly IGenericRepository<Domain.Models.Order> orderRepository;
+        private readonly IGenericRepository<Domain.Models.ShopOrder> orderRepository;
         private readonly IMapper mapper;
 
-        public OrderService(IGenericRepository<Domain.Models.Order> orderRepository,
+        public ShopOrderService(IGenericRepository<Domain.Models.ShopOrder> orderRepository,
             IMapper mapper
             )
         {
@@ -65,25 +65,25 @@ namespace infrastructure.Service.Order
 
         public List<OrderDto> GetOrders(int page, int pageSize)
         {
-            PagingDto<Domain.Models.Order> pagingDto = new PagingDto<Domain.Models.Order>()
+            PagingDto<Domain.Models.ShopOrder> pagingDto = new PagingDto<Domain.Models.ShopOrder>()
             {
                 Page = page,
                 PageSize = pageSize
             };
             var orders = orderRepository.GetWithPaging(null, pagingDto);
-            var result = mapper.Map<List<Domain.Models.Order>, List<OrderDto>>(orders.PageData);
+            var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
             return result;
         }
 
         public List<OrderDto> GetUserOrders(string userName, int page, int pageSize)
         {
-            PagingDto<Domain.Models.Order> pagingDto = new PagingDto<Domain.Models.Order>()
+            PagingDto<Domain.Models.ShopOrder> pagingDto = new PagingDto<Domain.Models.ShopOrder>()
             {
                 Page = page,
                 PageSize = pageSize
             };
             var orders = orderRepository.GetWithPaging(e => e.UserId == userName, pagingDto);
-            var result = mapper.Map<List<Domain.Models.Order>, List<OrderDto>>(orders.PageData);
+            var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
             return result;
         }
 
@@ -94,7 +94,7 @@ namespace infrastructure.Service.Order
 
         public ApiResult InsertOrder(InsertOrderDto model)
         {
-            var insertDiscount = mapper.Map<Domain.Models.Order>(model);
+            var insertDiscount = mapper.Map<Domain.Models.ShopOrder>(model);
             orderRepository.Add(insertDiscount);
             int result = orderRepository.SaveEntity();
             if (result <= 0)
@@ -119,7 +119,7 @@ namespace infrastructure.Service.Order
             throw new NotImplementedException();
         }
 
-        public Domain.Models.Order GetOrder(string invoiceNumber)
+        public Domain.Models.ShopOrder GetOrder(string invoiceNumber)
         {
             return orderRepository.Find(e => e.OrderNumber == invoiceNumber).SingleOrDefault();
         }

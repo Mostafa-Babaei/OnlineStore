@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace infrastructure.Service
 {
-    public interface IOrder
+    public interface IShopOrderService
     {
         /// <summary>
         /// ثبت سفارش جدید
@@ -45,7 +45,7 @@ namespace infrastructure.Service
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        Domain.Models.Order GetOrder(string invoiceNumber);
+        Domain.Models.ShopOrder GetOrder(string invoiceNumber);
 
         /// <summary>
         /// دریافت لیست سفارشات

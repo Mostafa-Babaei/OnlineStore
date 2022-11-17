@@ -29,7 +29,7 @@ namespace infrastructure.Data
 
         #region Order
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<ShopOrder> Orders { get; set; }
 
         #endregion
 

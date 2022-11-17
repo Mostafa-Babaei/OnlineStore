@@ -9,7 +9,7 @@ namespace OnlineStore.api.Controllers
     /// <summary>
     /// سبد خرید
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ShoppingCartController : ControllerBase
     {
@@ -25,9 +25,26 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ApiResult AddToCart([FromBody] ShopingCartDto shopingCart)
+        public ApiResult AddToCart([FromBody] ShoppingCartDto shopingCart)
         {
             return shoppingCartService.AddToCart(shopingCart);
+        }
+
+        /// <summary>
+        /// دریافت سبد خرید مشتری
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult GetCartOfUser(string userId)
+        {
+            return ApiResult.ToSuccessModel("سبد خرید مشتری", shoppingCartService.GetItemsOfCustomer(userId));
+        }
+
+        [HttpDelete]
+        public ApiResult RemoveItemFromCart(string userId)
+        {
+            return ApiResult.ToSuccessModel("سبد خرید مشتری", shoppingCartService.GetItemsOfCustomer(userId));
         }
 
     }

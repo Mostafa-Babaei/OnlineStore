@@ -11,11 +11,11 @@ namespace infrastructure.Service
 {
     public interface IShoppingCartService
     {
-        ApiResult AddToCart(ShopingCartDto shopingCart);
-        ApiResult IncrementCart(ShoppingCart shopingCart,int count);
-        ApiResult DecrementCart(ShoppingCart shopingCart, int count);
+        ApiResult AddToCart(ShoppingCartDto shopingCart);
+        ApiResult IncrementCart(ShoppingCartDto shopingCart,int count);
+        ApiResult DecrementCart(ShoppingCartDto shopingCart, int count);
         ApiResult DeleteCart(string userId);
-        List<ShopingCartDto> GetItemsOfCustomer(string userId);
+        List<ShoppingCartDto> GetItemsOfCustomer(string userId);
         ShoppingCart GetItemOfCart(string userId,int productId);
     }
 }

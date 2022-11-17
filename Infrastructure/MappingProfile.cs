@@ -44,9 +44,9 @@ namespace infrastructure
             CreateMap<UseDiscount, InsertUseDiscountDto>().ReverseMap();
             CreateMap<UseDiscount, UseDiscount>().ReverseMap();
 
-            CreateMap<Order, OrderDto>().ReverseMap();
-            CreateMap<Order, InsertOrderDto>().ReverseMap();
-            CreateMap<Order, EditOrderDto>().ReverseMap();
+            CreateMap<ShopOrder, OrderDto>().ReverseMap();
+            CreateMap<ShopOrder, InsertOrderDto>().ReverseMap();
+            CreateMap<ShopOrder, EditOrderDto>().ReverseMap();
 
         }
     }

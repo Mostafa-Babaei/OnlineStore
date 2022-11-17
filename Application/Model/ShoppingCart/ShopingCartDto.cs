@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.Model
 {
-    public class ShopingCartDto
+    public class ShoppingCartDto
     {
         public int Id { get; set; }
 

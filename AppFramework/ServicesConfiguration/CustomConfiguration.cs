@@ -38,17 +38,16 @@ namespace AppFramework.ServicesConfiguration
         }
 
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static void AddServices(this IServiceCollection services)
         {
-
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
-            return services;
         }
 
         public static void AutoMapperConfig(this IServiceCollection services)

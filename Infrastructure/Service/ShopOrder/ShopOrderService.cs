@@ -2,6 +2,7 @@
 using Application.Common.Model;
 using Application.Model;
 using AutoMapper;
+using Domain.Entities;
 using Domain.Enums;
 using Domain.Models;
 using infrastructure.Repository;
@@ -16,13 +17,16 @@ namespace infrastructure.Service.Order
     public class ShopOrderService : IShopOrderService
     {
         private readonly IGenericRepository<ShopOrder> orderRepository;
+        private readonly IGenericRepository<OrderItem> orderItemRepository;
         private readonly IMapper mapper;
 
         public ShopOrderService(IGenericRepository<ShopOrder> orderRepository,
+            IGenericRepository<OrderItem> orderItemRepository,
             IMapper mapper
             )
         {
             this.orderRepository = orderRepository;
+            this.orderItemRepository = orderItemRepository;
             this.mapper = mapper;
         }
         public ApiResult ChangeStateOrder(string orderNumber, OrderState state)
@@ -95,7 +99,10 @@ namespace infrastructure.Service.Order
 
         public ApiResult InsertOrder(InsertOrderDto model)
         {
-            var insertDiscount = mapper.Map<Domain.Models.ShopOrder>(model);
+            var insertDiscount = mapper.Map<ShopOrder>(model);
+            insertDiscount.OrderItems = new List<OrderItem>();
+            List<OrderItem> orderItems = mapper.Map<List<InsertOrderItemDto>, List<OrderItem>>(model.ItemsOfOrder);
+            insertDiscount.OrderItems = orderItems;
             orderRepository.Add(insertDiscount);
             int result = orderRepository.SaveEntity();
             if (result <= 0)

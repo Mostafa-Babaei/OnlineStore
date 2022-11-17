@@ -1,6 +1,7 @@
 ﻿using Application.Common.Model;
 using Application.Model;
 using Domain.Entities;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,10 @@ namespace infrastructure.Service
     public interface IShoppingCartService
     {
         ApiResult AddToCart(ShoppingCartDto shopingCart);
-        ApiResult IncrementCart(ShoppingCartDto shopingCart,int count);
+        ApiResult IncrementCart(ShoppingCartDto shopingCart, int count);
         ApiResult DecrementCart(ShoppingCartDto shopingCart, int count);
         ApiResult DeleteCart(string userId);
         List<ShoppingCartDto> GetItemsOfCustomer(string userId);
-        ShoppingCart GetItemOfCart(string userId,int productId);
+        ShoppingCart GetItemOfCart(string userId, int productId);
     }
 }

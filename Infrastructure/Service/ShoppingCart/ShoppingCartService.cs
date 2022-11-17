@@ -2,6 +2,7 @@
 using Application.Model;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Models;
 using infrastructure.Repository;
 using System;
 using System.Collections.Generic;

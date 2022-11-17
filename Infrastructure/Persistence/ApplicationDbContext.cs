@@ -14,7 +14,7 @@ namespace infrastructure.Data
         {
         }
         #region Public
-        
+
         public DbSet<Contact> Contacts { get; set; }
 
         #endregion
@@ -30,6 +30,7 @@ namespace infrastructure.Data
         #region Order
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShopOrder> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         #endregion
 

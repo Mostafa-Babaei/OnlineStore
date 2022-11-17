@@ -3,6 +3,7 @@ using Application.Common.Model;
 using Application.Model;
 using AutoMapper;
 using Domain.Enums;
+using Domain.Models;
 using infrastructure.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,10 @@ namespace infrastructure.Service.Order
 {
     public class ShopOrderService : IShopOrderService
     {
-        private readonly IGenericRepository<Domain.Models.ShopOrder> orderRepository;
+        private readonly IGenericRepository<ShopOrder> orderRepository;
         private readonly IMapper mapper;
 
-        public ShopOrderService(IGenericRepository<Domain.Models.ShopOrder> orderRepository,
+        public ShopOrderService(IGenericRepository<ShopOrder> orderRepository,
             IMapper mapper
             )
         {

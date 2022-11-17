@@ -29,7 +29,8 @@ namespace infrastructure.Service
                 int result = 0;
                 if (!CheckExistProductInUserCart(shopingCart.UserId, shopingCart.ProductId))
                 {
-                    result = shoppingCartRepository.Add(model);
+                    shoppingCartRepository.Add(model);
+                    result = shoppingCartRepository.SaveEntity();
                     if (result <= 0)
                         return ApiResult.ToErrorModel("خطا در ثبت سبد خرید");
                     return ApiResult.ToSuccessModel("کالا با موفقیت در سبد خرید ثبت شد");

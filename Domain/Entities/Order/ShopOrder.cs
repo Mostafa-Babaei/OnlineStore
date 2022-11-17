@@ -27,10 +27,6 @@ namespace Domain.Models
         public bool IsPayment { get; set; }
         public bool IsActive { get; set; }
         public int Price { get; set; }
-        public DateTime? DiscountExpirationDate { get; set; }
-        public int Discount { get; set; }
-        public string DiscountCode { get; set; }
-        public string UserOrder { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

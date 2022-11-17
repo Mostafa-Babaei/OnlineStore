@@ -55,7 +55,8 @@ namespace infrastructure.Service
         {
             Brand brand = mapper.Map<Brand>(insertBrand);
 
-            int result = brandRepository.Add(brand);
+            brandRepository.Add(brand);
+            int result = brandRepository.SaveEntity();
             if (result <= 0)
                 return ApiResult.ToErrorModel("خطا در ثبت برند");
             return ApiResult.ToSuccessModel("ثبت برند با موفقیت ثبت شد");

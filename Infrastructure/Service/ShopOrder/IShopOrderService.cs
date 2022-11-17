@@ -45,7 +45,7 @@ namespace infrastructure.Service
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        Domain.Models.ShopOrder GetOrder(string invoiceNumber);
+        ShopOrder GetOrder(string invoiceNumber);
 
         /// <summary>
         /// دریافت لیست سفارشات

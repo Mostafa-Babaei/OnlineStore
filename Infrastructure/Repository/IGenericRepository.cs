@@ -23,7 +23,7 @@ namespace infrastructure.Repository
         IEnumerable<T> Find(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes);
         bool Exist(Expression<Func<T, bool>> expression);
         IEnumerable<T> FindNoTrack(Expression<Func<T, bool>> expression);
-        int Add(T entity);
+        void Add(T entity);
         int Count();
         int Count(Expression<Func<T, bool>> expression);
         void AddRange(IEnumerable<T> entities);

@@ -159,7 +159,8 @@ namespace infrastructure.Service
             try
             {
                 Product product = mapper.Map<Product>(model);
-                int result = productRepository.Add(product);
+                productRepository.Add(product);
+                int result = productRepository.SaveEntity();
                 if (result <= 0)
                     return ApiResult.ToErrorModel("خطا در ثبت محصول");
                 return ApiResult.ToSuccessModel("ثبت محصول با موفقیت ثبت شد");

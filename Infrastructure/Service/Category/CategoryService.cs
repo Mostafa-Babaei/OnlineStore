@@ -102,7 +102,8 @@ namespace infrastructure.Service
             try
             {
                 Category category = mapper.Map<Category>(model);
-                var result = categoryRepository.Add(category);
+                categoryRepository.Add(category);
+                int result = categoryRepository.SaveEntity();
                 if (result <= 0)
                     return ApiResult.ToErrorModel("خطا در ثبت دسته بندی");
                 return ApiResult.ToSuccessModel("ثبت دسته بندی با موفقیت ثبت شد");

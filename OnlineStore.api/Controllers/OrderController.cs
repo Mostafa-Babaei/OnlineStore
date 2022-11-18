@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineStore.api.Controllers
 {
@@ -29,14 +31,13 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
+        [Authorize(Roles ="Admin")]
         public ApiResult AddOrder()
         {
             //Todo:بررسی و ثبت سفارش و ارسال ایمیل برای مشتری و ادمین
             if (!User.Identity.IsAuthenticated)
-            {
                 return ApiResult.ToErrorModel("لطفا وارد شوید");
-            }
 
             string userId = this.User.Claims.FirstOrDefault(e => e.Type == "userId")?.Value;
 
@@ -67,5 +68,53 @@ namespace OnlineStore.api.Controllers
             return OrderService.InsertOrder(model);
 
         }
+
+        /// <summary>
+        /// دریافت لیست سفارشات
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult GetOrders(int? page = 1, int? count = 10)
+        {
+            return ApiResult.ToSuccessModel("", OrderService.GetOrders(page.Value, count.Value));
+        }
+
+        /// <summary>
+        /// دریافت لیست سفارشات مشتری
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult GetOrdersOfUser(string userId, int? page = 1, int? count = 10)
+        {
+            return ApiResult.ToSuccessModel("", OrderService.GetUserOrders(userId, page.Value, count.Value));
+        }
+
+        /// <summary>
+        /// دریافت سفارش
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult GetOrder(string orderNumber)
+        {
+            return ApiResult.ToSuccessModel("", OrderService.GetOrderDto(orderNumber));
+        }
+
+        /// <summary>
+        /// تغییر وضعیت سفارش
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public ApiResult changeStateOrder(string orderNumber, OrderState state)
+        {
+            return OrderService.ChangeStateOrder(orderNumber, state);
+        }
+
     }
 }

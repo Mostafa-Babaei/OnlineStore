@@ -127,7 +127,7 @@ namespace infrastructure.Service
             throw new NotImplementedException();
         }
 
-        public Domain.Models.ShopOrder GetOrder(string invoiceNumber)
+        public ShopOrder GetOrder(string invoiceNumber)
         {
             return orderRepository.Find(e => e.OrderNumber == invoiceNumber).SingleOrDefault();
         }

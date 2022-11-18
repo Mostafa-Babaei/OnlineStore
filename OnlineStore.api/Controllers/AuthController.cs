@@ -23,13 +23,19 @@ namespace OnlineStore.api.Controllers
             this.configuration = configuration;
             this.identityService = identityService;
         }
+        
+        [HttpGet]
+        public ApiResult TestApi()
+        {
+            return ApiResult.ToSuccessModel("Test Ok");
+        }
 
         /// <summary>
         /// ورود کاربر
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost("login")]
+        [HttpPost]
         public ApiResult Login([FromBody] LoginApi user)
         {
             try
@@ -85,8 +91,8 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost("register")]
-        public ApiResult Registe([FromBody] RegisterUserDto registerModel)
+        [HttpPost]
+        public ApiResult Register([FromBody] RegisterUserDto registerModel)
         {
             try
             {
@@ -110,7 +116,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpGet("reset-password")]
+        [HttpGet]
         public ApiResult ResetPassword(string email)
         {
             //Todo:بررسی کاربر و ایجاد توکن و ارسال از طریق ایمیل 
@@ -122,7 +128,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="changePasswordModel"></param>
         /// <returns></returns>
-        [HttpPut("change-password")]
+        [HttpPut]
         [Authorize]
         public ApiResult ChangePassword([FromBody] ChangePasswordByUserDto changePasswordModel)
         {

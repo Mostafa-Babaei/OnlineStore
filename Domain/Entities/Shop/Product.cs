@@ -18,7 +18,7 @@ namespace Domain.Models
         public string PicPath { get; set; }
         public bool IsActive { get; set; }
         public int Quntity { get; set; }
-        public long Price { get; set; }
+        public int Price { get; set; }
 
         /// <summary>
         /// ارتباط با جدول  دسته بندی

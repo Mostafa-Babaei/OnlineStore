@@ -18,5 +18,6 @@ namespace infrastructure.Service
         ApiResult DeleteCart(string userId);
         List<ShoppingCartDto> GetItemsOfCustomer(string userId);
         ShoppingCart GetItemOfCart(string userId, int productId);
+        bool ExistCartForUser(string userId);
     }
 }

@@ -47,6 +47,7 @@ namespace AppFramework.ServicesConfiguration
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddScoped<IShopOrderService, ShopOrderService>();
 
         }
 

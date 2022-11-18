@@ -11,7 +11,7 @@ using System.Text;
 
 namespace OnlineStore.api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -56,11 +56,20 @@ namespace OnlineStore.api.Controllers
                     var tokeOptions = new JwtSecurityToken(
                         issuer: configuration["Jwt:Issuer"],
                         audience: configuration["Jwt:Audience"],
-                        claims: new List<Claim>(),
+                        claims: new List<Claim>() {
+                        new Claim("userId", signinState.Data.ToString())
+                        },
                         expires: DateTime.Now.AddMinutes(5),
                         signingCredentials: signinCredentials
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                    var claims = new List<Claim>
+                    {
+                        new Claim("userId",signinState.Data.ToString())
+                    };
+
+                    var appIdentity = new ClaimsIdentity(claims);
+                    User.AddIdentity(appIdentity);
                     return ApiResult.ToSuccessModel("ورود کاربر با موفقیت انجام شد", tokenString);
                 }
                 return ApiResult.ToErrorModel(signinState.Message);

@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace infrastructure.Service.Order
+namespace infrastructure.Service
 {
     public class ShopOrderService : IShopOrderService
     {

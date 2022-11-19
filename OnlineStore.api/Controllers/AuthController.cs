@@ -117,6 +117,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize]
         public ApiResult ResetPassword(string email)
         {
             //Todo:بررسی کاربر و ایجاد توکن و ارسال از طریق ایمیل 

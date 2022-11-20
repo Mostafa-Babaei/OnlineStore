@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace infrastructure.Service.Order
+namespace infrastructure.Service
 {
     public class ShopOrderService : IShopOrderService
     {
@@ -127,7 +127,7 @@ namespace infrastructure.Service.Order
             throw new NotImplementedException();
         }
 
-        public Domain.Models.ShopOrder GetOrder(string invoiceNumber)
+        public ShopOrder GetOrder(string invoiceNumber)
         {
             return orderRepository.Find(e => e.OrderNumber == invoiceNumber).SingleOrDefault();
         }

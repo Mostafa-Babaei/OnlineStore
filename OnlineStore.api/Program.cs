@@ -17,6 +17,7 @@ builder.Services.AddDbContextConfiguration(configuration);
 builder.Services.AddIdentityService();
 builder.Services.AddServices();
 builder.Services.AutoMapperConfig();
+builder.Services.AddCross();
 
 
 //تنظیمات اعتبار سنجی swagger
@@ -90,5 +91,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors("originList");
 app.Run();

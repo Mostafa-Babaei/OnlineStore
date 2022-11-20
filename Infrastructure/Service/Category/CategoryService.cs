@@ -56,9 +56,7 @@ namespace infrastructure.Service
         {
             try
             {
-                var result = categoryRepository.Find(e => e.CategoryName == category).SingleOrDefault();
-                if (result == null) return false;
-                return true;
+                return categoryRepository.Exist(e => e.CategoryName == category);
             }
             catch (Exception ex)
             {
@@ -102,6 +100,9 @@ namespace infrastructure.Service
         {
             try
             {
+                if (ExistCategory(model.CategoryName))
+                    return ApiResult.ToErrorModel("دسته بندی مورد نظر تکراری می باشد");
+
                 Category category = mapper.Map<Category>(model);
                 categoryRepository.Add(category);
                 int result = categoryRepository.SaveEntity();

@@ -92,6 +92,11 @@ namespace infrastructure.Service
             }
         }
 
+        public bool ExistCartForUser(string userId)
+        {
+            return shoppingCartRepository.Exist(e => e.UserId == userId);
+        }
+
         public ShoppingCart GetItemOfCart(string userId, int productId)
         {
             try

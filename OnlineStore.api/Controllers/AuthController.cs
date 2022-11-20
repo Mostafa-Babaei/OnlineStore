@@ -11,7 +11,7 @@ using System.Text;
 
 namespace OnlineStore.api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -23,13 +23,19 @@ namespace OnlineStore.api.Controllers
             this.configuration = configuration;
             this.identityService = identityService;
         }
+        
+        [HttpGet]
+        public ApiResult TestApi()
+        {
+            return ApiResult.ToSuccessModel("Test Ok");
+        }
 
         /// <summary>
         /// ورود کاربر
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost("login")]
+        [HttpPost]
         public ApiResult Login([FromBody] LoginApi user)
         {
             try
@@ -56,11 +62,20 @@ namespace OnlineStore.api.Controllers
                     var tokeOptions = new JwtSecurityToken(
                         issuer: configuration["Jwt:Issuer"],
                         audience: configuration["Jwt:Audience"],
-                        claims: new List<Claim>(),
+                        claims: new List<Claim>() {
+                        new Claim("userId", signinState.Data.ToString())
+                        },
                         expires: DateTime.Now.AddMinutes(5),
                         signingCredentials: signinCredentials
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                    var claims = new List<Claim>
+                    {
+                        new Claim("userId",signinState.Data.ToString())
+                    };
+
+                    var appIdentity = new ClaimsIdentity(claims);
+                    User.AddIdentity(appIdentity);
                     return ApiResult.ToSuccessModel("ورود کاربر با موفقیت انجام شد", tokenString);
                 }
                 return ApiResult.ToErrorModel(signinState.Message);
@@ -76,8 +91,8 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost("register")]
-        public ApiResult Registe([FromBody] RegisterUserDto registerModel)
+        [HttpPost]
+        public ApiResult Register([FromBody] RegisterUserDto registerModel)
         {
             try
             {
@@ -101,7 +116,8 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpGet("reset-password")]
+        [HttpGet]
+        [Authorize]
         public ApiResult ResetPassword(string email)
         {
             //Todo:بررسی کاربر و ایجاد توکن و ارسال از طریق ایمیل 
@@ -113,7 +129,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <param name="changePasswordModel"></param>
         /// <returns></returns>
-        [HttpPut("change-password")]
+        [HttpPut]
         [Authorize]
         public ApiResult ChangePassword([FromBody] ChangePasswordByUserDto changePasswordModel)
         {

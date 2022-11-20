@@ -47,6 +47,7 @@ namespace AppFramework.ServicesConfiguration
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddScoped<IShopOrderService, ShopOrderService>();
 
         }
 
@@ -58,6 +59,19 @@ namespace AppFramework.ServicesConfiguration
             });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+        }
+        public static void AddCross(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "originList",
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:4200")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                                  });
+            });
         }
     }
 }

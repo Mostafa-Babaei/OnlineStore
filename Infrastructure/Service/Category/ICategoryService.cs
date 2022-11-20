@@ -13,7 +13,7 @@ namespace infrastructure.Service
         /// لیست دسته بندی ها
         /// </summary>
         /// <returns></returns>
-        List<Category> GetAllCategory();
+        List<CategoryDto> GetAllCategory();
 
         /// <summary>
         /// دریافت دسته بندی

@@ -33,9 +33,21 @@ namespace infrastructure.Service
             return ApiResult.ToSuccessModel("حذف برند با موفقیت ثبت شد");
         }
 
-        public List<Brand> GetAllBrand()
+        public List<BrandDto> GetAllBrand()
         {
-            return brandRepository.GetAll().ToList();
+            List<BrandDto> brands = new List<BrandDto>();
+            try
+            {
+                var model = brandRepository.GetAll().ToList();
+                brands = mapper.Map<List<Brand>, List<BrandDto>>(model);
+                return brands;
+            }
+            catch (Exception ex)
+            {
+                //logger.LogError(ex, "دریافت اطلاعات ");
+                return brands;
+            }
+            
         }
 
         public Brand GetBrand(int id)

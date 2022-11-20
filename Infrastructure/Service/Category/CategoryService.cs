@@ -67,12 +67,13 @@ namespace infrastructure.Service
             }
         }
 
-        public List<Category> GetAllCategory()
+        public List<CategoryDto> GetAllCategory()
         {
-            List<Category> categories = new List<Category>();
+            List<CategoryDto> categories = new List<CategoryDto>();
             try
             {
-                categories = categoryRepository.GetAll().ToList();
+                var model = categoryRepository.GetAll().ToList();
+                categories = mapper.Map<List<Category>, List<CategoryDto>>(model);
                 return categories;
             }
             catch (Exception ex)

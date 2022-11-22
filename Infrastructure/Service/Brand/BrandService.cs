@@ -33,9 +33,10 @@ namespace infrastructure.Service
             return ApiResult.ToSuccessModel("حذف برند با موفقیت ثبت شد");
         }
 
-        public List<Brand> GetAllBrand()
+        public List<BrandDto> GetAllBrand()
         {
-            return brandRepository.GetAll().ToList();
+            var model = brandRepository.GetAll().ToList();
+            return mapper.Map<List<Brand>, List<BrandDto>>(model);
         }
 
         public Brand GetBrand(int id)

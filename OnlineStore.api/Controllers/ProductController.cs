@@ -47,7 +47,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ApiResult AddProduc([FromBody] InsertProductDto insertProduct)
+        public ApiResult AddProduct([FromBody] InsertProductDto insertProduct)
         {
             return productService.InsertProduct(insertProduct);
         }

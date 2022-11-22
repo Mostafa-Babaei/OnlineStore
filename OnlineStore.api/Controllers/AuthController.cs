@@ -30,6 +30,13 @@ namespace OnlineStore.api.Controllers
             return ApiResult.ToSuccessModel("Test Ok");
         }
 
+
+        [HttpGet]
+        public ApiResult GetAllUser()
+        {
+            return ApiResult.ToSuccessModel("لیست کاربران", identityService.GetUsers().Result);
+        }
+
         /// <summary>
         /// ورود کاربر
         /// </summary>
@@ -148,6 +155,19 @@ namespace OnlineStore.api.Controllers
             }
         }
 
+        [HttpPut]
+        [Authorize]
+        public ApiResult ChangeState(string userId)
+        {
+            try
+            {
+               return identityService.ChangeStateUser(userId);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+            }
+        }
 
     }
 }

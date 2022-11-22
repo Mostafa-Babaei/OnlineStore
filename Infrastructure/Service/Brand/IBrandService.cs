@@ -15,7 +15,7 @@ namespace infrastructure.Service
         /// دریافت برند ها
         /// </summary>
         /// <returns></returns>
-        List<Brand> GetAllBrand();
+        List<BrandDto> GetAllBrand();
 
         /// <summary>
         /// ثبت برند

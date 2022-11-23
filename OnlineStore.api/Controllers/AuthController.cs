@@ -13,6 +13,7 @@ namespace OnlineStore.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration configuration;
@@ -25,6 +26,7 @@ namespace OnlineStore.api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ApiResult TestApi()
         {
             return ApiResult.ToSuccessModel("Test Ok");
@@ -43,6 +45,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         public ApiResult Login([FromBody] LoginApi user)
         {
             try
@@ -99,6 +102,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         public ApiResult Register([FromBody] RegisterUserDto registerModel)
         {
             try
@@ -124,7 +128,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public ApiResult ResetPassword(string email)
         {
             //Todo:بررسی کاربر و ایجاد توکن و ارسال از طریق ایمیل 
@@ -137,7 +141,6 @@ namespace OnlineStore.api.Controllers
         /// <param name="changePasswordModel"></param>
         /// <returns></returns>
         [HttpPut]
-        [Authorize]
         public ApiResult ChangePassword([FromBody] ChangePasswordByUserDto changePasswordModel)
         {
             try
@@ -156,7 +159,6 @@ namespace OnlineStore.api.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public ApiResult ChangeState(string userId)
         {
             try
@@ -209,7 +211,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="newPassword"></param>
         /// <returns></returns>
         [HttpPut]
-        public ApiResult Changepassword(string newPassword)
+        public ApiResult ChangePassword(string newPassword)
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)

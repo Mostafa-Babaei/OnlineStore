@@ -143,6 +143,20 @@ namespace infrastructure.Identity
         /// <returns></returns>
         int UserCount ();
 
+        /// <summary>
+        /// افزودن نقش
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        Task<ApiResult> AddRole(string role);
+
+        /// <summary>
+        /// دریافت نقش های کاربر
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        ApiResult GetRolesOfUser(string userId);
+
         List<AuthenticationScheme> GetExternalLogins();
 
         AuthenticationProperties ConfigExternalLogin(string provider,string returnUrl);

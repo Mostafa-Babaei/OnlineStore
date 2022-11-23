@@ -23,7 +23,7 @@ namespace OnlineStore.api.Controllers
             this.configuration = configuration;
             this.identityService = identityService;
         }
-        
+
         [HttpGet]
         public ApiResult TestApi()
         {
@@ -161,12 +161,82 @@ namespace OnlineStore.api.Controllers
         {
             try
             {
-               return identityService.ChangeStateUser(userId);
+                return identityService.ChangeStateUser(userId);
             }
             catch (Exception ex)
             {
                 return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
             }
+        }
+
+
+        /// <summary>
+        /// دریافت نقش ها
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult GetAllRole()
+        {
+            return ApiResult.ToSuccessModel("لیست نقش ها", identityService.GetRoles());
+        }
+
+        /// <summary>
+        /// ثبت نقش جدید
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ApiResult AddRole(string role)
+        {
+            return identityService.AddRole(role).Result;
+        }
+
+        /// <summary>
+        /// دریافت نقش کاربر
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult GetUserRole()
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
+            return identityService.GetRolesOfUser(userId);
+        }
+
+        /// <summary>
+        /// تغییر رمز عبور کاربر
+        /// </summary>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public ApiResult Changepassword(string newPassword)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
+
+            return identityService.ChangePassword(new ChangePasswordByAdminDto()
+            {
+                Password = newPassword,
+                UserId = userId
+            });
+        }
+
+        /// <summary>
+        /// ثبت نقش برای کاربر
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult SetUserRole(string role)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
+            return identityService.SetRoleUser(new SetUserRoleDto()
+            {
+                UserId = userId,
+                Roles = new List<string> { role }
+            });
         }
 
     }

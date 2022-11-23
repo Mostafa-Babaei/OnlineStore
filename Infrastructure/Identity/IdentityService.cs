@@ -327,5 +327,37 @@ namespace infrastructure.Identity
 
             return ApiResult.ToErrorModel("خطا در ورود کاربر");
         }
+
+        public async Task<ApiResult> AddRole(string role)
+        {
+            if (string.IsNullOrEmpty(role))
+                return ApiResult.ToErrorModel("عنوان نقش درخواستی را وارد نمائید");
+
+            if (await roleManager.RoleExistsAsync(role))
+                return ApiResult.ToErrorModel("نقش درخواستی تکراری می باشد");
+
+            IdentityResult result = await roleManager.CreateAsync(new IdentityRole()
+            {
+                Name = role
+            });
+
+            if (!result.Succeeded)
+                return ApiResult.ToErrorModel("خطا در ثبت نقش");
+
+            return ApiResult.ToSuccessModel("نقش با وفقیت ثبت شد");
+        }
+
+        public ApiResult GetRolesOfUser(string userId)
+        {
+            var user = GetUser(userId);
+
+            if (user == null)
+                return ApiResult.ToErrorModel("");
+
+            if (!user.IsSuccess)
+                return ApiResult.ToErrorModel(user.Message);
+
+            return ApiResult.ToSuccessModel(user.Message, _userManager.GetRolesAsync((ApplicationUser)user.Data));
+        }
     }
 }

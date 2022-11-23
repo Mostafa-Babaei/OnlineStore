@@ -21,11 +21,15 @@ namespace infrastructure
 
             #region Product mapping 
 
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Product, EditProductDto>().ReverseMap();
+            CreateMap<Product, InsertProductDto>().ReverseMap();
+            
+            #endregion
+
             CreateMap<Contact, ContactPageDto>().ReverseMap();
             CreateMap<Contact, InsertContactDto>().ReverseMap();
             CreateMap<Contact, CreateContactDto>().ReverseMap();
-
-            #endregion
 
 
             #region Brand mapping 

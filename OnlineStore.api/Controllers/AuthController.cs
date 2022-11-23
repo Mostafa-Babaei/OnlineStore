@@ -1,6 +1,7 @@
 ﻿using Application.Common.Model;
 using Application.Constant.Message;
 using infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace OnlineStore.api.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IIdentityService identityService;
-
+  
         public AuthController(IConfiguration configuration, IIdentityService identityService)
         {
             this.configuration = configuration;
@@ -113,8 +114,17 @@ namespace OnlineStore.api.Controllers
                     Password = registerModel.Password,
                     IsActive = true
                 };
-                return identityService.CreateUserAsync(registerDto).Result;
+                var registerState = identityService.CreateUserAsync(registerDto).Result;
+                if (!registerState.IsSuccess)
+                    return registerState;
 
+                var setRole= identityService.SetRoleUser(new SetUserRoleDto()
+                {
+                    Roles = new List<string>() { "Customer" },
+                    UserId = registerState.Data.ToString()
+                });
+
+                return registerState;
             }
             catch (Exception ex)
             {
@@ -199,7 +209,7 @@ namespace OnlineStore.api.Controllers
         [HttpGet]
         public ApiResult GetUserRole()
         {
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string userId = GetUser();
             if (userId == null)
                 return ApiResult.ToErrorModel("کاربر یافت نشد");
             return identityService.GetRolesOfUser(userId);
@@ -211,9 +221,9 @@ namespace OnlineStore.api.Controllers
         /// <param name="newPassword"></param>
         /// <returns></returns>
         [HttpPut]
-        public ApiResult ChangePassword(string newPassword)
+        public ApiResult ChangeUserPassword(string newPassword)
         {
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string userId = GetUser();
             if (userId == null)
                 return ApiResult.ToErrorModel("کاربر یافت نشد");
 
@@ -231,8 +241,8 @@ namespace OnlineStore.api.Controllers
         [HttpGet]
         public ApiResult SetUserRole(string role)
         {
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
+            string userId = GetUser();
+            if (GetUser() == null)
                 return ApiResult.ToErrorModel("کاربر یافت نشد");
             return identityService.SetRoleUser(new SetUserRoleDto()
             {
@@ -241,5 +251,10 @@ namespace OnlineStore.api.Controllers
             });
         }
 
+        private string GetUser()
+        {
+
+            return this.User.Claims.FirstOrDefault(e => e.Type == "userId")?.Value;
+        }
     }
 }

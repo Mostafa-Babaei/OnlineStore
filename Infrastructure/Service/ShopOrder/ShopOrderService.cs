@@ -80,7 +80,7 @@ namespace infrastructure.Service
             return result;
         }
 
-        public List<OrderDto> GetUserOrders(string userName, int page, int pageSize)
+        public ApiResult GetUserOrders(string userName, int page, int pageSize)
         {
             PagingDto<Domain.Models.ShopOrder> pagingDto = new PagingDto<Domain.Models.ShopOrder>()
             {
@@ -88,8 +88,9 @@ namespace infrastructure.Service
                 PageSize = pageSize
             };
             var orders = orderRepository.GetWithPaging(e => e.UserId == userName, pagingDto);
+
             var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
-            return result;
+            return ApiResult.ToSuccessModel("", orders);
         }
 
         public int GetUserOrdersCount(string userName)

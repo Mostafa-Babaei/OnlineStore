@@ -1,9 +1,7 @@
 ﻿using Application.Common.Model;
 using Application.Constant.Message;
 using infrastructure.Identity;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,7 +17,7 @@ namespace OnlineStore.api.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IIdentityService identityService;
-  
+
         public AuthController(IConfiguration configuration, IIdentityService identityService)
         {
             this.configuration = configuration;
@@ -118,7 +116,7 @@ namespace OnlineStore.api.Controllers
                 if (!registerState.IsSuccess)
                     return registerState;
 
-                var setRole= identityService.SetRoleUser(new SetUserRoleDto()
+                var setRole = identityService.SetRoleUser(new SetUserRoleDto()
                 {
                     Roles = new List<string>() { "Customer" },
                     UserId = registerState.Data.ToString()
@@ -251,9 +249,24 @@ namespace OnlineStore.api.Controllers
             });
         }
 
+
+
+        /// <summary>
+        /// ثبت نقش برای کاربر
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public bool IsInRole(string role)
+        {
+            string userId = GetUser();
+            if (GetUser() == null)
+                return false;
+            return identityService.IsInRoleAsync(userId, role).Result;
+        }
+
+
         private string GetUser()
         {
-
             return this.User.Claims.FirstOrDefault(e => e.Type == "userId")?.Value;
         }
     }

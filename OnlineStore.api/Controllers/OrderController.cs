@@ -88,8 +88,11 @@ namespace OnlineStore.api.Controllers
         /// <param name="count"></param>
         /// <returns></returns>
         [HttpGet]
-        public ApiResult GetOrdersOfUser(string userId, int? page = 1, int? count = 10)
+        public ApiResult GetOrdersOfUser(int? page = 1, int? count = 10)
         {
+            string userId = GetUser();
+            if (GetUser() == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
             return ApiResult.ToSuccessModel("", OrderService.GetUserOrders(userId, page.Value, count.Value));
         }
 
@@ -114,6 +117,12 @@ namespace OnlineStore.api.Controllers
         public ApiResult changeStateOrder(string orderNumber, OrderState state)
         {
             return OrderService.ChangeStateOrder(orderNumber, state);
+        }
+
+
+        private string GetUser()
+        {
+            return this.User.Claims.FirstOrDefault(e => e.Type == "userId")?.Value;
         }
 
     }

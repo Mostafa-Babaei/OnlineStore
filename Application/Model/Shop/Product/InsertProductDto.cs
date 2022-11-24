@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -34,5 +35,11 @@ namespace Application.Model
         [Display(Name = "برند محصول")]
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
         public int BrandId { get; set; }
+
+
+        [Display(Name = "تصویر محصول")]
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        public IFormFile ProductImage { get; set; }
+
     }
 }

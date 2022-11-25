@@ -32,7 +32,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public ApiResult AddOrder()
         {
             //Todo:بررسی و ثبت سفارش و ارسال ایمیل برای مشتری و ادمین
@@ -104,7 +104,22 @@ namespace OnlineStore.api.Controllers
         [HttpGet]
         public ApiResult GetOrder(string orderNumber)
         {
-            return ApiResult.ToSuccessModel("", OrderService.GetOrderDto(orderNumber));
+            //بررسی کاربر
+            string userId = GetUser();
+            if (GetUser() == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
+
+            //بررسی مالکیت سفارش
+            if (!OrderService.OrderForUser(orderNumber, userId))
+                return ApiResult.ToErrorModel("سفارش متعلق به شما نیست");
+            OrderDto orderDto = OrderService.GetOrderDto(orderNumber);
+
+            //اطلاعات محصول
+            if (orderDto.OrderItem.Any())
+                foreach (var item in orderDto.OrderItem)
+                    item.Product = productService.GetProductDto(item.ProductId);
+
+            return ApiResult.ToSuccessModel("سفارش با موفقیت دریافت شد", orderDto);
         }
 
         /// <summary>

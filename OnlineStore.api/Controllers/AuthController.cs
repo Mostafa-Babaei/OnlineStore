@@ -256,12 +256,14 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         public bool IsInRole(string role)
         {
             string userId = GetUser();
             if (GetUser() == null)
                 return false;
-            return identityService.IsInRoleAsync(userId, role).Result;
+            var t = identityService.IsInRoleAsync(userId, role).Result;
+            return t;
         }
 
 

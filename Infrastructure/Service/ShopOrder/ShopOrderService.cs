@@ -53,19 +53,27 @@ namespace infrastructure.Service
             int tryCount = 5;
             string invoceNumber = "N";
             invoceNumber += ShamsiDate.GetShamsiDateNow().Substring(2, 2);
-            while (repeatFlag && tryCount < 0)
+            while (repeatFlag && tryCount > 0)
             {
                 invoceNumber += new Random().Next(10000, 99999).ToString();
                 repeatFlag = ExistInvoiceNumber(invoceNumber);
                 tryCount--;
             }
+            if (repeatFlag)
+                return null;
+
             return invoceNumber;
         }
 
         public OrderDto GetOrderDto(string orderNumber)
         {
             var model = GetOrder(orderNumber);
-            return mapper.Map<OrderDto>(model);
+            OrderDto orderDto = mapper.Map<OrderDto>(model);
+            List<OrderItem> items = orderItemRepository.Find(e => e.OrderId == orderDto.Id).ToList();
+            if (items.Any())
+                orderDto.OrderItem = mapper.Map<List<OrderItem>, List<OrderItemDto>>(items);
+                
+            return orderDto;
         }
 
         public List<OrderDto> GetOrders(int page, int pageSize)
@@ -100,17 +108,18 @@ namespace infrastructure.Service
 
         public ApiResult InsertOrder(InsertOrderDto model)
         {
-            var insertDiscount = mapper.Map<ShopOrder>(model);
-            insertDiscount.OrderItems = new List<OrderItem>();
+            var insertOrde = mapper.Map<ShopOrder>(model);
+            insertOrde.OrderItems = new List<OrderItem>();
             List<OrderItem> orderItems = mapper.Map<List<InsertOrderItemDto>, List<OrderItem>>(model.ItemsOfOrder);
-            insertDiscount.OrderItems = orderItems;
-            orderRepository.Add(insertDiscount);
+            insertOrde.OrderItems = orderItems;
+            insertOrde.CreateAt = DateTime.Now;
+            insertOrde.IsEnable = true;
+            orderRepository.Add(insertOrde);
             int result = orderRepository.SaveEntity();
             if (result <= 0)
                 return ApiResult.ToErrorModel("خطا در ثبت سفارش");
 
-            return ApiResult.ToSuccessModel("ثبت سفارش با موفقیت انجام شد");
-            throw new NotImplementedException();
+            return ApiResult.ToSuccessModel("ثبت سفارش با موفقیت انجام شد", model.OrderNumber);
         }
 
         public Task NotifyNewOrderToAdmin(int orderId, List<string> adminEmails)
@@ -133,5 +142,10 @@ namespace infrastructure.Service
             return orderRepository.Find(e => e.OrderNumber == invoiceNumber).SingleOrDefault();
         }
 
+        public bool OrderForUser(string orderNumber, string userId)
+        {
+            return orderRepository.Exist(e => e.OrderNumber == orderNumber && e.UserId == userId);
+
+        }
     }
 }

@@ -24,13 +24,30 @@ namespace infrastructure
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Product, EditProductDto>().ReverseMap();
             CreateMap<Product, InsertProductDto>().ReverseMap();
-            
+
             #endregion
 
+            #region Contact
             CreateMap<Contact, ContactPageDto>().ReverseMap();
             CreateMap<Contact, InsertContactDto>().ReverseMap();
             CreateMap<Contact, CreateContactDto>().ReverseMap();
+            #endregion
 
+            #region ShoppingCart
+            CreateMap<ShoppingCart, ShoppingCartDto>().ReverseMap();
+            CreateMap<ShoppingCart, CartItemDto>().ReverseMap();
+            #endregion
+
+            #region Order
+            
+            CreateMap<OrderItem, InsertOrderItemDto>().ReverseMap();
+            CreateMap<OrderItem, OrderItemDto>().ReverseMap();
+
+            CreateMap<ShopOrder, OrderDto>().ReverseMap();
+            CreateMap<ShopOrder, InsertOrderDto>().ReverseMap();
+            CreateMap<ShopOrder, EditOrderDto>().ReverseMap();
+
+            #endregion
 
             #region Brand mapping 
 
@@ -48,9 +65,6 @@ namespace infrastructure
             CreateMap<UseDiscount, InsertUseDiscountDto>().ReverseMap();
             CreateMap<UseDiscount, UseDiscount>().ReverseMap();
 
-            CreateMap<ShopOrder, OrderDto>().ReverseMap();
-            CreateMap<ShopOrder, InsertOrderDto>().ReverseMap();
-            CreateMap<ShopOrder, EditOrderDto>().ReverseMap();
 
         }
     }

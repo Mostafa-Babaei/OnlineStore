@@ -26,10 +26,20 @@ namespace infrastructure.Service
         {
             try
             {
-                ShoppingCart model = mapper.Map<ShoppingCart>(shopingCart);
+                ShoppingCart model = new ShoppingCart()
+                {
+                    Count = shopingCart.Count,
+                    UserId = shopingCart.UserId,
+                    ProductId = shopingCart.ProductId,
+                    Product = shopingCart.Product
+                };
+
                 int result = 0;
+
                 if (!CheckExistProductInUserCart(shopingCart.UserId, shopingCart.ProductId))
                 {
+                    model.CreateAt = DateTime.Now;
+                    model.IsEnable = true;
                     shoppingCartRepository.Add(model);
                     result = shoppingCartRepository.SaveEntity();
                     if (result <= 0)
@@ -41,7 +51,7 @@ namespace infrastructure.Service
                     ShoppingCart cartItem = GetItemOfCart(shopingCart.UserId, shopingCart.ProductId);
                     if (cartItem == null)
                         return ApiResult.ToErrorModel("کالا در سبد خرید یافت نشد");
-                    return IncrementCart(shopingCart, shopingCart.ProductId);
+                    return IncrementCart(shopingCart, shopingCart.Count);
                 }
             }
             catch (Exception ex)
@@ -110,6 +120,30 @@ namespace infrastructure.Service
             }
         }
 
+
+        public ApiResult RemoveItemOfCart(string userId, int productId)
+        {
+            try
+            {
+                ShoppingCart item = shoppingCartRepository.Find(e => e.UserId == userId && e.ProductId == productId).FirstOrDefault();
+                if (item == null)
+                    return ApiResult.ToErrorModel("کالا در سبد خرید یافت نشد");
+
+                int result = shoppingCartRepository.Remove(item);
+
+                if (result <= 0)
+                    return ApiResult.ToErrorModel("خطا در حذف آیتم سبد خرید");
+
+                return ApiResult.ToSuccessModel("آیتم مورد نظر حذف شد");
+
+            }
+            catch (Exception ex)
+            {
+                //logger.LogError(ex, "خطا در ثبت دسته بندی");
+                return ApiResult.ToErrorModel("خطا در حذف");
+            }
+        }
+
         public List<ShoppingCartDto> GetItemsOfCustomer(string userId)
         {
             List<ShoppingCartDto> carts = new List<ShoppingCartDto>();
@@ -149,5 +183,19 @@ namespace infrastructure.Service
         {
             return shoppingCartRepository.Exist(e => e.UserId == userId && e.ProductId == productId);
         }
+
+        public ApiResult ChangeNumberOfItem(string userId, int productId, int count)
+        {
+            ShoppingCart shoppingCart = GetItemOfCart(userId, productId);
+            if (shoppingCart == null)
+                return ApiResult.ToErrorModel("محصول یافت نشد");
+            shoppingCart.Count = count;
+            int result = shoppingCartRepository.SaveEntity();
+
+            if (result <= 0)
+                return ApiResult.ToErrorModel("خطا در تغییر تعداد کالا در  سبد خرید");
+            return ApiResult.ToSuccessModel("تعداد کالا با موفقیت تغییر کرد");
+        }
+
     }
 }

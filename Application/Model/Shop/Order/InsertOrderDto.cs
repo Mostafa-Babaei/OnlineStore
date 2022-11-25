@@ -14,6 +14,7 @@ namespace Application.Model
         public bool IsPayment { get; set; }
         public bool IsActive { get; set; }
         public int Price { get; set; }
+        public string UserId{ get; set; }
         public List<InsertOrderItemDto> ItemsOfOrder { get; set; }
     }
 }

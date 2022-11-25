@@ -75,7 +75,7 @@ namespace infrastructure.Service
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        List<OrderDto> GetUserOrders(string userName, int page, int pageSize);
+        ApiResult GetUserOrders(string userName, int page, int pageSize);
 
         /// <summary>
         /// تعداد سفارشات کاربر
@@ -98,5 +98,13 @@ namespace infrastructure.Service
         /// <param name="adminEmails"></param>
         /// <returns></returns>
         Task NotifyNewOrderToAdmin(int orderId, List<string> adminEmails);
+
+        /// <summary>
+        /// بررسی مالکیت سفارش مشتری
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        bool OrderForUser(string orderNumber, string userId);
     }
 }

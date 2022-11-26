@@ -172,7 +172,7 @@ namespace infrastructure.Identity
             var user = _userManager.FindByIdAsync(userId).Result;
             if (user == null)
                 return ApiResult.ToErrorModel("خطا در دریافت اطلاعات کاربر");
-
+            
             return ApiResult.ToSuccessModel("اطلاعات کاربر دریافت شد", user);
 
         }

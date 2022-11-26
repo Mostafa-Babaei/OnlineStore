@@ -93,7 +93,7 @@ namespace OnlineStore.api.Controllers
             string userId = GetUser();
             if (GetUser() == null)
                 return ApiResult.ToErrorModel("کاربر یافت نشد");
-            return ApiResult.ToSuccessModel("", OrderService.GetUserOrders(userId, page.Value, count.Value));
+            return  OrderService.GetUserOrders(userId, page.Value, count.Value);
         }
 
         /// <summary>

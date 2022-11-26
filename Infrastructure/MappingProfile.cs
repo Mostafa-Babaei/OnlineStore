@@ -58,6 +58,7 @@ namespace infrastructure
             #endregion
 
             CreateMap<ApplicationUser, EditUserDto>().ReverseMap();
+            CreateMap<ApplicationUser, UserDto>().ReverseMap();
 
             CreateMap<Discount, DiscountDto>().ReverseMap();
             CreateMap<Discount, InsertDiscountDto>().ReverseMap();

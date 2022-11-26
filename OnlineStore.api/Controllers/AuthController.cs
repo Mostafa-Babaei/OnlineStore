@@ -1,8 +1,14 @@
-﻿using Application.Common.Model;
+﻿using Application.Common;
+using Application.Common.Model;
 using Application.Constant.Message;
+using Application.Model;
+using AutoMapper;
 using infrastructure.Identity;
+using infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,13 +21,17 @@ namespace OnlineStore.api.Controllers
     [Authorize]
     public class AuthController : ControllerBase
     {
+        private readonly IOptions<SiteSetting> option;
         private readonly IConfiguration configuration;
         private readonly IIdentityService identityService;
+        private readonly IMapper mapper;
 
-        public AuthController(IConfiguration configuration, IIdentityService identityService)
+        public AuthController(IOptions<SiteSetting> option, IConfiguration configuration, IIdentityService identityService, IMapper mapper)
         {
+            this.option = option;
             this.configuration = configuration;
             this.identityService = identityService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -78,7 +88,7 @@ namespace OnlineStore.api.Controllers
                         signingCredentials: signinCredentials
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                
+
 
                     var appIdentity = new ClaimsIdentity(claims);
                     User.AddIdentity(appIdentity);
@@ -246,8 +256,6 @@ namespace OnlineStore.api.Controllers
             });
         }
 
-
-
         /// <summary>
         /// ثبت نقش برای کاربر
         /// </summary>
@@ -262,6 +270,90 @@ namespace OnlineStore.api.Controllers
             var t = identityService.IsInRoleAsync(userId, role).Result;
             return t;
         }
+
+        /// <summary>
+        /// دریافت اطلاعات کاربر جاری
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public ApiResult GetCurrentUser()
+        {
+            string userId = GetUser();
+            if (GetUser() == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
+
+            var user = identityService.GetUser(userId);
+            var userDto = mapper.Map<UserDto>(user.Data);
+            userDto.avatar = option.Value.AvatarUrl + userDto.avatar;
+            return ApiResult.ToSuccessModel(user.Message, userDto);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public ApiResult UpdateUser(UserDto user)
+        {
+            string userId = GetUser();
+            if (GetUser() == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
+            var result = identityService.GetUser(userId);
+            if (!result.IsSuccess)
+                return result;
+            ApplicationUser applicationUser = (ApplicationUser)result.Data;
+            applicationUser.Email = user.email;
+            applicationUser.Fullname = user.fullname;
+            applicationUser.Mobile = user.mobile;
+            applicationUser.NationalCode = user.nationalCode;
+            return identityService.EditUser(applicationUser);
+
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public ApiResult AddAvatar(IFormFile avatar)
+        {
+            string userId = GetUser();
+            if (GetUser() == null)
+                return ApiResult.ToErrorModel("کاربر یافت نشد");
+
+            if (avatar == null)
+                return ApiResult.ToErrorModel("انتخاب تصویر الزامیست");
+            string formatFile = System.IO.Path.GetExtension(avatar.FileName);
+            string newName = Guid.NewGuid().ToString() + formatFile;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserAvatar/", newName);
+
+
+            var result = identityService.GetUser(userId);
+            if (!result.IsSuccess)
+                return result;
+            ApplicationUser applicationUser = (ApplicationUser)result.Data;
+            string oldImage = applicationUser.Avatar;
+
+            applicationUser.Avatar = newName;
+            var addresult = identityService.EditUser(applicationUser);
+
+            if (addresult.IsSuccess)
+            {
+
+                //حذف عکس قدیمی
+                if (!string.IsNullOrEmpty(oldImage))
+                {
+                    string pathimg = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/UserAvatar/", oldImage);
+                    if (System.IO.File.Exists(pathimg))
+                        System.IO.File.Delete(pathimg);
+                }
+
+                //ثبت عکس جدید
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    avatar.CopyTo(stream);
+                }
+            }
+
+            return addresult;
+        }
+
 
 
         private string GetUser()

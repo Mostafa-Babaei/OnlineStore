@@ -1,4 +1,5 @@
 ﻿using AppFramework.ServicesConfiguration;
+using Application.Common;
 using AutoMapper;
 using infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -51,6 +52,7 @@ builder.Services.AddSwaggerGen(option =>
 
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.Configure<SiteSetting>(configuration.GetSection("SiteSettings"));
 
 //کانفیگ jwt
 builder.Services.AddAuthentication(options =>

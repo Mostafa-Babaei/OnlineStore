@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -26,8 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Files\Avatar\" />
-    <Folder Include="wwwroot\Files\Product\" />
+    <Folder Include="wwwRoot\Files\" />
+    <Folder Include="wwwRoot\Files\UserAvatar\" />
+    <Folder Include="wwwRoot\Files\Product\" />
   </ItemGroup>
 
 </Project>

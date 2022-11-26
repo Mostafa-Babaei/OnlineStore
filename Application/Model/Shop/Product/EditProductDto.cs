@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -42,6 +43,10 @@ namespace Application.Model
         public int BrandId { get; set; }
 
         public List<SelectListItem> ListOfCategory { get; set; }
+
+
+        [Display(Name = "تصویر محصول")]
+        public IFormFile ProductImage { get; set; }
 
     }
 }

@@ -25,4 +25,9 @@
     <ProjectReference Include="..\Infrastructure\infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\Avatar\" />
+    <Folder Include="wwwroot\Files\Product\" />
+  </ItemGroup>
+
 </Project>

@@ -66,22 +66,19 @@ namespace OnlineStore.api.Controllers
                     if (configuration["Jwt:Key"] == null)
                         return ApiResult.ToErrorModel("کلید احراز هویت نامعتبر است");
 
+                    List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim("userId", signinState.Data.ToString()));
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"] ?? ""));
                     var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                     var tokeOptions = new JwtSecurityToken(
                         issuer: configuration["Jwt:Issuer"],
                         audience: configuration["Jwt:Audience"],
-                        claims: new List<Claim>() {
-                        new Claim("userId", signinState.Data.ToString())
-                        },
+                        claims: claims,
                         expires: DateTime.Now.AddMinutes(5),
                         signingCredentials: signinCredentials
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                    var claims = new List<Claim>
-                    {
-                        new Claim("userId",signinState.Data.ToString())
-                    };
+                
 
                     var appIdentity = new ClaimsIdentity(claims);
                     User.AddIdentity(appIdentity);

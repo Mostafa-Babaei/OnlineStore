@@ -49,7 +49,23 @@ namespace OnlineStore.api.Controllers
         [HttpPost]
         public ApiResult AddProduct([FromBody] InsertProductDto insertProduct)
         {
-            return productService.InsertProduct(insertProduct);
+
+            string formatFile = System.IO.Path.GetExtension(insertProduct.ProductImage.FileName);
+            string newName = Guid.NewGuid().ToString() + formatFile;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/Product/", newName);
+
+            insertProduct.PicPath = newName;
+            var addresult = productService.InsertProduct(insertProduct);
+
+            if (addresult.IsSuccess)
+            {
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    insertProduct.ProductImage.CopyTo(stream);
+                }
+            }
+
+            return addresult;
         }
 
 
@@ -60,6 +76,28 @@ namespace OnlineStore.api.Controllers
         [HttpPut]
         public ApiResult EditProduc([FromBody] EditProductDto editProducDto)
         {
+            if (editProducDto.ProductImage != null && editProducDto.ProductImage.Length > 0)
+            {
+
+                string formatFile = System.IO.Path.GetExtension(editProducDto.ProductImage.FileName);
+                string newName = Path.GetFileNameWithoutExtension(editProducDto.PicPath)+ formatFile;
+                //delete old file 
+                if (!String.IsNullOrEmpty(editProducDto.PicPath))
+                {
+                    string pathimg = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/Product/", editProducDto.PicPath);
+                    if (System.IO.File.Exists(pathimg))
+                        System.IO.File.Delete(pathimg);
+                }
+
+                //copy new file
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/Product/", newName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    editProducDto.ProductImage.CopyTo(stream);
+                }
+                editProducDto.PicPath = newName;
+            }
+
             return productService.EditProduct(editProducDto);
         }
 

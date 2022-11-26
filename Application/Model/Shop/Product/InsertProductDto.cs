@@ -40,6 +40,7 @@ namespace Application.Model
         [Display(Name = "تصویر محصول")]
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
         public IFormFile ProductImage { get; set; }
+        public string PicPath { get; set; }
 
     }
 }

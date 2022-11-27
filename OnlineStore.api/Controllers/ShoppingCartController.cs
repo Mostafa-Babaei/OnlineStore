@@ -117,6 +117,12 @@ namespace OnlineStore.api.Controllers
             return ApiResult.ToSuccessModel("اطلاعات سبد خرید", cartItem);
         }
 
+        /// <summary>
+        /// تغییر تعداد آیتم در سبد خرید
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="newCount"></param>
+        /// <returns></returns>
         [HttpPut]
         public ApiResult ChangeNumberOfCartItem(int productId, int newCount)
         {
@@ -130,7 +136,10 @@ namespace OnlineStore.api.Controllers
             return shoppingCartService.ChangeNumberOfItem(userId, productId, newCount);
         }
 
-
+        /// <summary>
+        /// تبدیل سبد خرید به سفارش
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ApiResult AddOrderFromCart()
         {
@@ -171,7 +180,7 @@ namespace OnlineStore.api.Controllers
                     IsPayment = false,
                     State = Domain.Enums.OrderState.DefineOrder,
                     OrderNumber = shopOrderService.GenerateInvoiceNumber(),
-                    UserId=userId
+                    UserId = userId
                 });
 
                 //حذف سبد خرید
@@ -186,6 +195,21 @@ namespace OnlineStore.api.Controllers
             {
                 return ApiResult.ToErrorModel("خطای پیش بینی نشده در ثبت سفارش");
             }
+        }
+
+        /// <summary>
+        /// دریافت تعداد محصول در سبد خرید
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public int GetNumberOfItem()
+        {
+            //بررسی کاربر
+            string userId = GetUser();
+            if (GetUser() == null)
+                return 0;
+
+            return shoppingCartService.GetNumberOfCartItem(userId);
         }
 
         private string GetUser()

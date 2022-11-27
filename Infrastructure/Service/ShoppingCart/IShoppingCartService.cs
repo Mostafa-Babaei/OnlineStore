@@ -56,5 +56,12 @@ namespace infrastructure.Service
         /// <returns></returns>
         ApiResult ChangeNumberOfItem(string userId, int productId, int count);
 
+        /// <summary>
+        /// دریافت تعداد محصول در سبد خرید
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        int GetNumberOfCartItem(string userId);
+
     }
 }

@@ -197,5 +197,9 @@ namespace infrastructure.Service
             return ApiResult.ToSuccessModel("تعداد کالا با موفقیت تغییر کرد");
         }
 
+        public int GetNumberOfCartItem(string userId)
+        {
+            return shoppingCartRepository.Count(e => e.UserId == userId);
+        }
     }
 }

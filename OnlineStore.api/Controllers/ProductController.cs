@@ -1,9 +1,11 @@
 ﻿using Application.Common.Model;
 using Application.Constant.Message;
 using Application.Model;
+using Domain.Models;
 using infrastructure.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace OnlineStore.api.Controllers
 {
@@ -22,6 +24,8 @@ namespace OnlineStore.api.Controllers
             this.productService = productService;
         }
 
+
+
         /// <summary>
         /// دریافت محصولات
         /// </summary>
@@ -31,6 +35,18 @@ namespace OnlineStore.api.Controllers
         {
             return ApiResult.ToSuccessModel(ProductMessages.ReceivedProductsSuccess, productService.GetAllProduct());
         }
+
+
+        /// <summary>
+        /// فیلتر محصولات
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ApiResult GetProductsByFilter(FilterProductRequestDto requestDto)
+        {
+            return ApiResult.ToSuccessModel(ProductMessages.ReceivedProductsSuccess, productService.FilterProduct(requestDto));
+        }
+        
 
         /// <summary>
         /// دریافت محصول

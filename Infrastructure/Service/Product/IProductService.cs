@@ -73,5 +73,12 @@ namespace infrastructure.Service
         /// <returns></returns>
         List<ProductDto> FindProducts(string productName);
 
+        /// <summary>
+        /// فیلتر محصولات
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
+        public ApiResult FilterProduct(FilterProductRequestDto requestDto);
+
     }
 }

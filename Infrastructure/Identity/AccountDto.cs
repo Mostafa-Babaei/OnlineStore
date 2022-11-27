@@ -172,6 +172,8 @@ namespace infrastructure.Identity
 
     public class RegisterUserDto
     {
+        public string Fullname { get; set; }
+
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
         [EmailAddress(ErrorMessage = "ایمیل صحیح را وارد نمائید")]
         [Display(Name = "نام کاربری(ایمیل)")]

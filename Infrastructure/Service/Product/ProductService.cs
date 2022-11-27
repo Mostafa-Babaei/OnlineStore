@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace infrastructure.Service
 {
@@ -72,6 +73,41 @@ namespace infrastructure.Service
             {
                 //logger.LogError(ex, "خطا در ویرایش محصول");
                 return ApiResult.ToErrorModel("خطا در ویرایش محصول");
+            }
+        }
+
+        public ApiResult FilterProduct(FilterProductRequestDto requestDto)
+        {
+            try
+            {
+                PagingDto<Product> paging = new PagingDto<Product>()
+                {
+                    Page = requestDto.Page,
+                    PageSize = requestDto.Count
+                };
+
+                var result = productRepository.GetWithPaging(e =>
+              (string.IsNullOrEmpty(requestDto.SearchText) && e.Title.Contains(requestDto.SearchText)) &&
+              (requestDto.BrandFilter != null && requestDto.BrandFilter > 0 && e.BrandId == requestDto.BrandFilter) &&
+              (requestDto.CategoryFilte != null && requestDto.CategoryFilte > 0 && e.CategoryId == requestDto.CategoryFilte), paging);
+
+                FilterProductRequestDto resultSearch = new FilterProductRequestDto()
+                {
+                    SearchText = requestDto.SearchText,
+                    BrandFilter = requestDto.CategoryFilte,
+                    CategoryFilte = requestDto.CategoryFilte,
+                    NumberOfPage = result.TotalPage,
+                    TotalCount = result.TotalCount,
+                    Count = result.PageSize,
+                    Page = result.Page,
+                    Products = result.PageData,
+                };
+                return ApiResult.ToSuccessModel("", result);
+            }
+            catch (Exception ex)
+            {
+                //logger.LogError(ex, "خطا در ویرایش محصول");
+                return ApiResult.ToErrorModel("خطا در جستجوی محصول");
             }
         }
 
@@ -188,5 +224,7 @@ namespace infrastructure.Service
                 return ApiResult.ToErrorModel("خطا در ثبت محصول");
             }
         }
+
+
     }
 }

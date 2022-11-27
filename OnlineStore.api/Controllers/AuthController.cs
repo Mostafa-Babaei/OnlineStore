@@ -49,6 +49,23 @@ namespace OnlineStore.api.Controllers
         }
 
         /// <summary>
+        /// ثبت کاربر جدید
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult AddNewUser([FromBody] RegisterUserDto registerModel)
+        {
+            RegisterDto model = new RegisterDto()
+            {
+                Email = registerModel.Email,
+                IsActive = true,
+                Password = registerModel.Password,
+                Fullname = registerModel.Fullname
+            };
+            return ApiResult.ToSuccessModel("لیست کاربران", identityService.CreateUserAsync(model).Result);
+        }
+
+        /// <summary>
         /// ورود کاربر
         /// </summary>
         /// <param name="user"></param>

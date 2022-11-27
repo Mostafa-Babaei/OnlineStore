@@ -53,7 +53,7 @@ namespace infrastructure.Service
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        List<OrderDto> GetOrders(int page, int pageSize);
+        ApiResult GetOrders(int page, int pageSize);
 
         /// <summary>
         /// بررسی موجود بودن شماره سفارش

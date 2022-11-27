@@ -9,7 +9,6 @@ using infrastructure.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace infrastructure.Service
@@ -76,7 +75,7 @@ namespace infrastructure.Service
             return orderDto;
         }
 
-        public List<OrderDto> GetOrders(int page, int pageSize)
+        public ApiResult GetOrders(int page, int pageSize)
         {
             PagingDto<Domain.Models.ShopOrder> pagingDto = new PagingDto<Domain.Models.ShopOrder>()
             {
@@ -84,8 +83,9 @@ namespace infrastructure.Service
                 PageSize = pageSize
             };
             var orders = orderRepository.GetWithPaging(null, pagingDto);
-            var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
-            return result;
+            //var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
+
+            return ApiResult.ToSuccessModel("", orders);
         }
 
         public ApiResult GetUserOrders(string userName, int page, int pageSize)
@@ -97,7 +97,8 @@ namespace infrastructure.Service
             };
             var orders = orderRepository.GetWithPaging(e => e.UserId == userName, pagingDto);
 
-            var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
+            //var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
+
             return ApiResult.ToSuccessModel("", orders);
         }
 

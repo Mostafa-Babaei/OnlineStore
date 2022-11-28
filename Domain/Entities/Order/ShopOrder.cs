@@ -27,6 +27,7 @@ namespace Domain.Models
         public bool IsPayment { get; set; }
         public bool IsActive { get; set; }
         public int Price { get; set; }
+        public string UserId { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

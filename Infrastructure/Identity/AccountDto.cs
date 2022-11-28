@@ -36,7 +36,7 @@ namespace infrastructure.Identity
         public bool RemmemberMe { get; set; }
 
         public string ReturnUrl { get; set; }
-     
+
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
     }
 
@@ -156,7 +156,6 @@ namespace infrastructure.Identity
         public IFormFile PictureFile { get; set; }
     }
 
-
     public class SetUserRoleDto
     {
 
@@ -170,5 +169,37 @@ namespace infrastructure.Identity
         public List<string> Roles { get; set; }
 
     }
+
+    public class RegisterUserDto
+    {
+        public string Fullname { get; set; }
+
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        [EmailAddress(ErrorMessage = "ایمیل صحیح را وارد نمائید")]
+        [Display(Name = "نام کاربری(ایمیل)")]
+        public string Email { get; set; }
+
+        [Display(Name = "کلمه عبور")]
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        public string Password { get; set; }
+    }
+
+    public class ChangePasswordByUserDto
+    {
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        public string UserId { get; set; }
+
+        [Display(Name = "کلمه عبور")]
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        public string Password { get; set; }
+
+        [Display(Name = "تکرار کلمه عبور")]
+        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
+        [Compare(nameof(Password), ErrorMessage = "رمز عبور ها یکسان نیست")]
+        public string ConfirmPassword { get; set; }
+    }
+
+
+
 
 }

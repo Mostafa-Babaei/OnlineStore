@@ -18,10 +18,9 @@ namespace infrastructure.Repository
             _context = context;
             entities = context.Set<T>();
         }
-        public int Add(T entity)
+        public void Add(T entity)
         {
             entities.Add(entity);
-            return _context.SaveChanges();
         }
         public void AddRange(IEnumerable<T> entities)
         {

@@ -1,5 +1,6 @@
 ﻿using Application.Common.Model;
 using Application.Constant.Message;
+using Application.Model;
 using Domain.Entities;
 using infrastructure.Service;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineStore.api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -22,7 +23,7 @@ namespace OnlineStore.api.Controllers
         /// دریافت دسته بندی های محصول
         /// </summary>
         /// <returns></returns>
-        [HttpGet(Name = "get")]
+        [HttpGet]
         public ApiResult Get()
         {
             try
@@ -36,29 +37,34 @@ namespace OnlineStore.api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// افزودن دسته بندی جدید
         /// </summary>
         /// <returns></returns>
-        [HttpPost(Name = "add")]
-        public ApiResult AddCategory()
+        [HttpPost]
+        public ApiResult AddCategory([FromBody] InsertCategoryDto categoryMOdel)
         {
-            return ApiResult.ToSuccessModel(CommonMessage.AddedDataSuccess);
+            return categoryService.InsertCategory(categoryMOdel);
         }
 
         /// <summary>
-        /// 
+        /// ویرایش دسته بندی
         /// </summary>
         /// <returns></returns>
-        [HttpPut(Name = "edit")]
-        public ApiResult EditCategory()
+        [HttpPut]
+        public ApiResult EditCategory([FromBody] EditCategoryDto editCategoryDto)
         {
-            return ApiResult.ToSuccessModel(CommonMessage.EditedDataSuccess);
+            return categoryService.EditCategory(editCategoryDto);
         }
 
-        [HttpDelete(Name = "delete")]
-        public ApiResult DeleteCategory()
+        /// <summary>
+        /// حذف دسته بندی
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public ApiResult DeleteCategory(int id)
         {
-            return ApiResult.ToSuccessModel(CommonMessage.DeletedDataSuccess);
+            return categoryService.RemoveCategory(id);
         }
     }
 }

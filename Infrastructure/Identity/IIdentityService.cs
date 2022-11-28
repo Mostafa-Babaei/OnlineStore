@@ -117,6 +117,14 @@ namespace infrastructure.Identity
         ApiResult SetRoleUser(SetUserRoleDto model);
 
         /// <summary>
+        /// حذف نقش کاربر
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
+        ApiResult RemoveRoleFromUser(string userId,string roleName);
+
+        /// <summary>
         /// اصلاح نقش های کاربر
         /// </summary>
         /// <param name="model"></param>
@@ -142,6 +150,20 @@ namespace infrastructure.Identity
         /// </summary>
         /// <returns></returns>
         int UserCount ();
+
+        /// <summary>
+        /// افزودن نقش
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        Task<ApiResult> AddRole(string role);
+
+        /// <summary>
+        /// دریافت نقش های کاربر
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        ApiResult GetRolesOfUser(string userId);
 
         List<AuthenticationScheme> GetExternalLogins();
 

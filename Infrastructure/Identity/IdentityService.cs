@@ -17,20 +17,18 @@ namespace infrastructure.Identity
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> signManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+        //private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
         public IdentityService(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signManager,
-        RoleManager<IdentityRole> roleManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory)
+        RoleManager<IdentityRole> roleManager)
+        //IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory)
         {
             _userManager = userManager;
             this.signManager = signManager;
             this.roleManager = roleManager;
-            _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
+            //_userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         }
-
-
 
         public async Task<string> GetUserNameAsync(string userId)
         {
@@ -67,7 +65,7 @@ namespace infrastructure.Identity
                 return ApiResult.ToErrorModel("خطا در ثبت کاربر", errors);
             }
 
-            return new ApiResult() { IsSuccess = result.Succeeded, Message = "", Data = user };
+            return new ApiResult() { IsSuccess = result.Succeeded, Message = "ثبت نام کاربر با موفقیت انجام شد", Data = user.Id };
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
@@ -89,7 +87,7 @@ namespace infrastructure.Identity
                 //userIdentity.AddClaim(new Claim("Fullname", user.Fullname));
                 if (!user.IsActive)
                     return ApiResult.ToErrorModel("حساب کاربری شما غیر فعال است، لطفا با پشتیبان سایت هماهنگ بفرمائید", null);
-                return ApiResult.ToSuccessModel("به نیابی خوش آمدید", null);
+                return ApiResult.ToSuccessModel(" خوش آمدید", user.Id);
             }
             if (result.IsNotAllowed)
                 return ApiResult.ToErrorModel("نام کاربری و یا کلمه عبور اشتباه است", null);
@@ -174,11 +172,13 @@ namespace infrastructure.Identity
             var user = _userManager.FindByIdAsync(userId).Result;
             if (user == null)
                 return ApiResult.ToErrorModel("خطا در دریافت اطلاعات کاربر");
-
+            
             return ApiResult.ToSuccessModel("اطلاعات کاربر دریافت شد", user);
 
         }
 
+
+    
         public ApiResult SetRoleUser(SetUserRoleDto model)
         {
             var userResult = GetUser(model.UserId);
@@ -192,6 +192,8 @@ namespace infrastructure.Identity
 
             return ApiResult.ToSuccessModel("نقش کاربر دریافت شد");
         }
+
+        
 
         public string GetErrorMessage(IEnumerable<IdentityError> errors)
         {
@@ -317,17 +319,63 @@ namespace infrastructure.Identity
                         EmailConfirmed = true
                     };
 
-                     _userManager.CreateAsync(user);
+                    _userManager.CreateAsync(user);
                 }
 
-                 _userManager.AddLoginAsync(user, checkLogin);
-                 signManager.SignInAsync(user, false);
+                _userManager.AddLoginAsync(user, checkLogin);
+                signManager.SignInAsync(user, false);
 
                 return ApiResult.ToSuccessModel("کاربر با موفقیت ثبت شد");
             }
 
 
             return ApiResult.ToErrorModel("خطا در ورود کاربر");
+        }
+
+        public async Task<ApiResult> AddRole(string role)
+        {
+            if (string.IsNullOrEmpty(role))
+                return ApiResult.ToErrorModel("عنوان نقش درخواستی را وارد نمائید");
+
+            if (await roleManager.RoleExistsAsync(role))
+                return ApiResult.ToErrorModel("نقش درخواستی تکراری می باشد");
+
+            IdentityResult result = await roleManager.CreateAsync(new IdentityRole()
+            {
+                Name = role
+            });
+
+            if (!result.Succeeded)
+                return ApiResult.ToErrorModel("خطا در ثبت نقش");
+
+            return ApiResult.ToSuccessModel("نقش با وفقیت ثبت شد");
+        }
+
+        public ApiResult GetRolesOfUser(string userId)
+        {
+            var user = GetUser(userId);
+
+            if (user == null)
+                return ApiResult.ToErrorModel("");
+
+            if (!user.IsSuccess)
+                return ApiResult.ToErrorModel(user.Message);
+
+            return ApiResult.ToSuccessModel(user.Message, _userManager.GetRolesAsync((ApplicationUser)user.Data));
+        }
+
+        public ApiResult RemoveRoleFromUser(string userId, string roleName)
+        {
+            var userResult = GetUser(userId);
+            if (!userResult.IsSuccess)
+                return userResult;
+            ApplicationUser user = (ApplicationUser)userResult.Data;
+
+            var result = _userManager.RemoveFromRoleAsync(user, roleName).Result;
+            if (!result.Succeeded)
+                return ApiResult.ToErrorModel("خطا حذف نقش کاربر");
+
+            return ApiResult.ToSuccessModel("نقش کاربر حذف شد");
         }
     }
 }

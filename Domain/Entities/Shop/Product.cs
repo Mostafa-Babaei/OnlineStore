@@ -18,7 +18,32 @@ namespace Domain.Models
         public string PicPath { get; set; }
         public bool IsActive { get; set; }
         public int Quntity { get; set; }
-        public long Price { get; set; }
+        public int Price { get; set; }
+
+        /// <summary>
+        /// ارتباط با جدول  دسته بندی
+        /// </summary>
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public virtual Category Category { get; set; }
+
+
+        /// <summary>
+        /// ارتباط با برند
+        /// </summary>
+        public int BrandId { get; set; }
+        [ForeignKey("BrandId")]
+        public virtual Brand Brand { get; set; }
+
+        /// <summary>
+        /// ارتباط با سفارش
+        /// </summary>
+        public virtual ICollection<ShopOrder> ShopOrders { get; set; }
+
+        /// <summary>
+        /// ارتباط با سبد خرید
+        /// </summary>
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
 
 
     }

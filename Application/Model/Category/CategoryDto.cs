@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Application.Model
 {
+    /// <summary>
+    /// مدل دسته بندی
+    /// </summary>
     public class CategoryDto
     {
         public int Id { get; set; }

@@ -56,7 +56,8 @@ namespace infrastructure.Service
 
             Contact contact = mapper.Map<Contact>(model);
             contact.CreateAt = DateTime.Now;
-            int result = contactRepository.Add(contact);
+            contactRepository.Add(contact);
+            int result = contactRepository.SaveEntity();
             if (result > 0)
                 return ApiResult.ToSuccessModel("پیام شما با موفقیت ارسال شد");
 

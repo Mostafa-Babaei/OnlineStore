@@ -117,6 +117,14 @@ namespace infrastructure.Identity
         ApiResult SetRoleUser(SetUserRoleDto model);
 
         /// <summary>
+        /// حذف نقش کاربر
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
+        ApiResult RemoveRoleFromUser(string userId,string roleName);
+
+        /// <summary>
         /// اصلاح نقش های کاربر
         /// </summary>
         /// <param name="model"></param>

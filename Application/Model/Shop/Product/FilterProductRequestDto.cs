@@ -13,7 +13,7 @@ namespace Application.Model
         public int TotalCount { get; set; }
         public List<Product> Products { get; set; }
         public int? BrandFilter { get; set; }
-        public int? CategoryFilte { get; set; }
+        public int? CategoryFilter { get; set; }
         public string SearchText { get; set; }
     }
 }

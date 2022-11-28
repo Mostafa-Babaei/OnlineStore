@@ -8,5 +8,6 @@ namespace Application.Common
     {
         public string BaseUrl { get; set; }
         public string AvatarUrl { get; set; }
+        public string ProductImageUrl { get; set; }
     }
 }

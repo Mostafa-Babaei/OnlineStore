@@ -80,5 +80,11 @@ namespace infrastructure.Service
         /// <returns></returns>
         public ApiResult FilterProduct(FilterProductRequestDto requestDto);
 
+        /// <summary>
+        /// ذخیره سازی محصول
+        /// </summary>
+        /// <returns></returns>
+        ApiResult SaveProduct();
+
     }
 }

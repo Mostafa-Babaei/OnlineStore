@@ -177,6 +177,8 @@ namespace infrastructure.Identity
 
         }
 
+
+    
         public ApiResult SetRoleUser(SetUserRoleDto model)
         {
             var userResult = GetUser(model.UserId);
@@ -190,6 +192,8 @@ namespace infrastructure.Identity
 
             return ApiResult.ToSuccessModel("نقش کاربر دریافت شد");
         }
+
+        
 
         public string GetErrorMessage(IEnumerable<IdentityError> errors)
         {
@@ -358,6 +362,20 @@ namespace infrastructure.Identity
                 return ApiResult.ToErrorModel(user.Message);
 
             return ApiResult.ToSuccessModel(user.Message, _userManager.GetRolesAsync((ApplicationUser)user.Data));
+        }
+
+        public ApiResult RemoveRoleFromUser(string userId, string roleName)
+        {
+            var userResult = GetUser(userId);
+            if (!userResult.IsSuccess)
+                return userResult;
+            ApplicationUser user = (ApplicationUser)userResult.Data;
+
+            var result = _userManager.RemoveFromRoleAsync(user, roleName).Result;
+            if (!result.Succeeded)
+                return ApiResult.ToErrorModel("خطا حذف نقش کاربر");
+
+            return ApiResult.ToSuccessModel("نقش کاربر حذف شد");
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Application.Model
         [Display(Name = "تصویر")]
         public string PicPath { get; set; }
 
+
         [Display(Name = "وضعیت")]
         public bool IsActive { get; set; }
 

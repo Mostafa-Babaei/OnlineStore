@@ -71,7 +71,7 @@ namespace infrastructure.Service
             List<OrderItem> items = orderItemRepository.Find(e => e.OrderId == orderDto.Id).ToList();
             if (items.Any())
                 orderDto.OrderItem = mapper.Map<List<OrderItem>, List<OrderItemDto>>(items);
-                
+
             return orderDto;
         }
 
@@ -83,7 +83,7 @@ namespace infrastructure.Service
                 PageSize = pageSize
             };
             var orders = orderRepository.GetWithPaging(null, pagingDto);
-            //var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
+//            var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
 
             return ApiResult.ToSuccessModel("", orders);
         }
@@ -141,6 +141,19 @@ namespace infrastructure.Service
         public ShopOrder GetOrder(string invoiceNumber)
         {
             return orderRepository.Find(e => e.OrderNumber == invoiceNumber).SingleOrDefault();
+        }
+
+        public ApiResult PaymentOrders(string orderNumber)
+        {
+            ShopOrder order = GetOrder(orderNumber);
+            if (order == null)
+                return ApiResult.ToErrorModel("سفارش یافت نشد");
+            order.IsPayment = true;
+            int result = orderRepository.SaveEntity();
+            if (result <= 0)
+                return ApiResult.ToErrorModel("خطا در تسویه سفارش");
+
+            return ApiResult.ToSuccessModel("تسویه سفارش با موفقیت انجام شد");
         }
 
         public bool OrderForUser(string orderNumber, string userId)

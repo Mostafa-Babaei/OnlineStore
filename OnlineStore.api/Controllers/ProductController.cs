@@ -44,9 +44,9 @@ namespace OnlineStore.api.Controllers
         [HttpPost]
         public ApiResult GetProductsByFilter(FilterProductRequestDto requestDto)
         {
-            return ApiResult.ToSuccessModel(ProductMessages.ReceivedProductsSuccess, productService.FilterProduct(requestDto));
+            return  productService.FilterProduct(requestDto);
         }
-        
+
 
         /// <summary>
         /// دریافت محصول
@@ -66,20 +66,20 @@ namespace OnlineStore.api.Controllers
         public ApiResult AddProduct([FromBody] InsertProductDto insertProduct)
         {
 
-            string formatFile = System.IO.Path.GetExtension(insertProduct.ProductImage.FileName);
-            string newName = Guid.NewGuid().ToString() + formatFile;
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/Product/", newName);
+            //string formatFile = System.IO.Path.GetExtension(insertProduct.ProductImage.FileName);
+            //string newName = Guid.NewGuid().ToString() + formatFile;
+            //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/Product/", newName);
 
-            insertProduct.PicPath = newName;
+            //insertProduct.PicPath = newName;
             var addresult = productService.InsertProduct(insertProduct);
 
-            if (addresult.IsSuccess)
-            {
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    insertProduct.ProductImage.CopyTo(stream);
-                }
-            }
+            //if (addresult.IsSuccess)
+            //{
+            //    using (var stream = new FileStream(path, FileMode.Create))
+            //    {
+            //        insertProduct.ProductImage.CopyTo(stream);
+            //    }
+            //}
 
             return addresult;
         }
@@ -96,7 +96,7 @@ namespace OnlineStore.api.Controllers
             {
 
                 string formatFile = System.IO.Path.GetExtension(editProducDto.ProductImage.FileName);
-                string newName = Path.GetFileNameWithoutExtension(editProducDto.PicPath)+ formatFile;
+                string newName = Path.GetFileNameWithoutExtension(editProducDto.PicPath) + formatFile;
                 //delete old file 
                 if (!String.IsNullOrEmpty(editProducDto.PicPath))
                 {
@@ -139,5 +139,56 @@ namespace OnlineStore.api.Controllers
             return productService.changeStateProduct(id, newState);
         }
 
+        public class uploadModel
+        {
+            public int Id { get; set; }
+            public IFormFile ProductImage { get; set; }
+        }
+        [HttpPost]
+        [Route("{id}")]
+        public ApiResult UploadImageOfProduct(int id,IFormFile ProductImage)
+        {
+            try
+            {
+                if (ProductImage == null)
+                    return ApiResult.ToErrorModel("تصویر یافت نشد");
+
+                string formatFile = System.IO.Path.GetExtension(ProductImage.FileName);
+                string newName = Guid.NewGuid().ToString() + formatFile;
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/Product/", newName);
+
+                Product product = productService.GetProduct(id);
+                if (product == null)
+                    return ApiResult.ToErrorModel("محصول یافت نشد");
+                string oldImage = product.PicPath;
+                product.PicPath = newName;
+                var addresult = productService.SaveProduct();
+
+                if (addresult.IsSuccess)
+                {
+                    //delete old image
+                    if (!string.IsNullOrEmpty(oldImage))
+                    {
+                        string pathimg = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files/Product/", oldImage);
+                        if (System.IO.File.Exists(pathimg))
+                            System.IO.File.Delete(pathimg);
+                    }
+
+
+                    //add newImage
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        ProductImage.CopyTo(stream);
+                    }
+                }
+
+                return ApiResult.ToSuccessModel("تصویر محصول با موفقیت بارگذاری شد");
+
+            }
+            catch (Exception)
+            {
+                return ApiResult.ToErrorModel("خطا پیش بینی نشده در بارگذاری تصویر محصول");
+            }
+        }
     }
 }

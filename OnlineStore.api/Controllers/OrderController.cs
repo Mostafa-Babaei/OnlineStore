@@ -78,7 +78,7 @@ namespace OnlineStore.api.Controllers
         [HttpGet]
         public ApiResult GetOrders(int? page = 1, int? count = 10)
         {
-            return ApiResult.ToSuccessModel("", OrderService.GetOrders(page.Value, count.Value));
+            return  OrderService.GetOrders(page.Value, count.Value);
         }
 
         /// <summary>
@@ -132,6 +132,17 @@ namespace OnlineStore.api.Controllers
         public ApiResult changeStateOrder(string orderNumber, OrderState state)
         {
             return OrderService.ChangeStateOrder(orderNumber, state);
+        }
+
+        /// <summary>
+        /// تسویه سفارش
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ApiResult PaymentOrder(string orderNumber)
+        {
+            return OrderService.PaymentOrders(orderNumber);
         }
 
 

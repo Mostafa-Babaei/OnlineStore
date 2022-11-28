@@ -36,11 +36,5 @@ namespace Application.Model
         [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
         public int BrandId { get; set; }
 
-
-        [Display(Name = "تصویر محصول")]
-        [Required(ErrorMessage = "وارد نمودن {0} الزامیست")]
-        public IFormFile ProductImage { get; set; }
-        public string PicPath { get; set; }
-
     }
 }

@@ -1,9 +1,11 @@
-﻿using Application.Common.Model;
+﻿using Application.Common;
+using Application.Common.Model;
 using Application.Model;
 using AutoMapper;
 using Domain.Models;
 using infrastructure.Repository;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +17,14 @@ namespace infrastructure.Service
     {
         private readonly IMapper mapper;
         private readonly IGenericRepository<Product> productRepository;
+        private readonly IOptions<SiteSetting> option;
 
         public ProductService(
-            IMapper mapper, IGenericRepository<Product> productRepository)
+            IMapper mapper, IGenericRepository<Product> productRepository, IOptions<SiteSetting> option)
         {
             this.mapper = mapper;
             this.productRepository = productRepository;
+            this.option = option;
         }
 
         public ApiResult changeStateProduct(int productId, bool? newState)
@@ -76,6 +80,14 @@ namespace infrastructure.Service
             }
         }
 
+        public ApiResult SaveProduct()
+        {
+            int result = productRepository.SaveEntity();
+            if (result <= 0)
+                return ApiResult.ToErrorModel("خطا در ویرایش محصول");
+            return ApiResult.ToSuccessModel("ویرایش محصول با موفقیت ثبت شد");
+        }
+
         public ApiResult FilterProduct(FilterProductRequestDto requestDto)
         {
             try
@@ -85,24 +97,43 @@ namespace infrastructure.Service
                     Page = requestDto.Page,
                     PageSize = requestDto.Count
                 };
+                if (requestDto.CategoryFilter > 0)
+                {
+                    paging = productRepository.GetWithPaging(e => e.CategoryId == requestDto.CategoryFilter, paging);
+                }
+                else if (requestDto.BrandFilter > 0)
+                {
+                    paging = productRepository.GetWithPaging(e => e.BrandId == requestDto.BrandFilter, paging);
+                }
+                else if (!string.IsNullOrEmpty(requestDto.SearchText))
+                {
+                    paging = productRepository.GetWithPaging(e => e.Title.Contains(requestDto.SearchText), paging);
+                }
+                else
+                {
+                    paging = productRepository.GetWithPaging(null, paging);
+                }
 
-                var result = productRepository.GetWithPaging(e =>
-              (string.IsNullOrEmpty(requestDto.SearchText) && e.Title.Contains(requestDto.SearchText)) &&
-              (requestDto.BrandFilter != null && requestDto.BrandFilter > 0 && e.BrandId == requestDto.BrandFilter) &&
-              (requestDto.CategoryFilte != null && requestDto.CategoryFilte > 0 && e.CategoryId == requestDto.CategoryFilte), paging);
+                //  var result = productRepository.GetWithPaging(e =>
+                //(string.IsNullOrEmpty(requestDto.SearchText) && e.Title.Contains(requestDto.SearchText)) &&
+                //(requestDto.BrandFilter != null && requestDto.BrandFilter > 0 && e.BrandId == requestDto.BrandFilter) &&
+                //(requestDto.CategoryFilte != null && requestDto.CategoryFilte > 0 && e.CategoryId == requestDto.CategoryFilte), paging);
 
                 FilterProductRequestDto resultSearch = new FilterProductRequestDto()
                 {
                     SearchText = requestDto.SearchText,
-                    BrandFilter = requestDto.CategoryFilte,
-                    CategoryFilte = requestDto.CategoryFilte,
-                    NumberOfPage = result.TotalPage,
-                    TotalCount = result.TotalCount,
-                    Count = result.PageSize,
-                    Page = result.Page,
-                    Products = result.PageData,
+                    BrandFilter = requestDto.BrandFilter,
+                    CategoryFilter = requestDto.CategoryFilter,
+                    NumberOfPage = paging.TotalPage,
+                    TotalCount = paging.TotalCount,
+                    Count = paging.PageSize,
+                    Page = paging.Page,
+                    Products = paging.PageData,
                 };
-                return ApiResult.ToSuccessModel("", result);
+                foreach (var item in resultSearch.Products)
+                    item.PicPath = option.Value.ProductImageUrl + item.PicPath;
+
+                return ApiResult.ToSuccessModel("", resultSearch);
             }
             catch (Exception ex)
             {
@@ -135,6 +166,9 @@ namespace infrastructure.Service
             {
                 var productsDto = productRepository.GetAll().ToList();
                 products = mapper.Map<List<Product>, List<ProductDto>>(productsDto);
+                foreach (var item in products)
+                    item.PicPath = option.Value.ProductImageUrl + item.PicPath;
+
                 return products;
 
             }
@@ -165,6 +199,7 @@ namespace infrastructure.Service
             {
                 var productsDto = productRepository.Find(e => e.ProductId == id).FirstOrDefault();
                 product = mapper.Map<ProductDto>(productsDto);
+                product.PicPath = option.Value.ProductImageUrl + product.PicPath;
                 return product;
             }
             catch (Exception ex)

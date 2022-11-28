@@ -106,5 +106,13 @@ namespace infrastructure.Service
         /// <param name="userId"></param>
         /// <returns></returns>
         bool OrderForUser(string orderNumber, string userId);
+
+        /// <summary>
+        /// تسویه سفارش
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <returns></returns>
+        ApiResult PaymentOrders(string orderNumber);
+
     }
 }

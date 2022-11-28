@@ -8,6 +8,7 @@ using infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -52,7 +53,7 @@ namespace OnlineStore.api.Controllers
         /// ثبت کاربر جدید
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public ApiResult AddNewUser([FromBody] RegisterUserDto registerModel)
         {
             RegisterDto model = new RegisterDto()
@@ -62,7 +63,17 @@ namespace OnlineStore.api.Controllers
                 Password = registerModel.Password,
                 Fullname = registerModel.Fullname
             };
-            return ApiResult.ToSuccessModel("لیست کاربران", identityService.CreateUserAsync(model).Result);
+            var result = identityService.CreateUserAsync(model).Result;
+            //تعریف نقش
+            if (result.IsSuccess)
+            {
+                var setRole = identityService.SetRoleUser(new SetUserRoleDto()
+                {
+                    Roles = new List<string>() { "Customer" },
+                    UserId = result.Data.ToString()
+                });
+            }
+            return result;
         }
 
         /// <summary>
@@ -303,8 +314,77 @@ namespace OnlineStore.api.Controllers
             var user = identityService.GetUser(userId);
             var userDto = mapper.Map<UserDto>(user.Data);
             userDto.avatar = option.Value.AvatarUrl + userDto.avatar;
+
+            userDto.role = identityService.GetRoles().Select(e => new SelectListItem()
+            {
+                Text = e.Name,
+                Value = e.Id,
+                Selected = identityService.IsInRoleAsync(userId, e.Name).Result
+            }).ToList();
             return ApiResult.ToSuccessModel(user.Message, userDto);
         }
+
+        /// <summary>
+        /// دریافت کاربر با شناسه
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public ApiResult GetCurrentUserById(string userId)
+        {
+            var user = identityService.GetUser(userId);
+            var userDto = mapper.Map<UserDto>(user.Data);
+            userDto.avatar = option.Value.AvatarUrl + userDto.avatar;
+
+            userDto.role = identityService.GetRoles().Select(e => new SelectListItem()
+            {
+                Text = e.Name,
+                Value = e.Id,
+                Selected = identityService.IsInRoleAsync(userId, e.Name).Result
+            }).ToList();
+
+            return ApiResult.ToSuccessModel(user.Message, userDto);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public ApiResult UpdateUserById(UserDto user)
+        {
+
+            var result = identityService.GetUser(user.userId);
+            if (!result.IsSuccess)
+                return result;
+            ApplicationUser applicationUser = (ApplicationUser)result.Data;
+            applicationUser.Email = user.email;
+            applicationUser.Fullname = user.fullname;
+            applicationUser.Mobile = user.mobile;
+            applicationUser.NationalCode = user.nationalCode;
+            applicationUser.IsActive = user.isActive;
+            var editResult = identityService.EditUser(applicationUser);
+            if (editResult.IsSuccess)
+            {
+                //اصلاح نقش کاربر
+                foreach (var item in user.role)
+                {
+                    bool isInRole = identityService.IsInRoleAsync(user.userId, item.Text).Result;
+                    if (item.Selected && isInRole == false)
+                    {
+                        SetUserRoleDto userRole = new SetUserRoleDto();
+                        userRole.Roles = new List<string>() { item.Text };
+                        userRole.UserId = user.userId;
+
+                        identityService.SetRoleUser(userRole);
+                    }
+                    if (!item.Selected && isInRole)
+                    {
+                        identityService.RemoveRoleFromUser(user.userId, item.Text);
+                    }
+                }
+            }
+            return editResult;
+        }
+
 
         [HttpPut]
         [Authorize]

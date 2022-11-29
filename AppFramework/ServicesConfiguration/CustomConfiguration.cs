@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Common;
+using AutoMapper;
 using infrastructure;
 using infrastructure.Data;
 using infrastructure.Identity;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace AppFramework.ServicesConfiguration
 {
@@ -60,14 +62,16 @@ namespace AppFramework.ServicesConfiguration
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
         }
-        public static void AddCross(this IServiceCollection services)
+        public static void AddCross(this IServiceCollection services, IConfiguration Configuration)
         {
+
+            string setting = Configuration.GetSection("SiteSettings").GetSection("OriginWebsite").Value?? "http://localhost:4200";
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "originList",
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:4200")
+                                      policy.WithOrigins(setting)
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                                   });

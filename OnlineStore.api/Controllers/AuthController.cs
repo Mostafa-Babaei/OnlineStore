@@ -126,7 +126,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError + ex.ToString());
             }
         }
 
@@ -161,7 +161,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError + ex.ToString());
             }
         }
 

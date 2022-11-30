@@ -183,6 +183,8 @@ namespace infrastructure.Identity
         {
             try
             {
+                if (roleManager.RoleExistsAsync(model.Roles.First()).Result == false)
+                    return ApiResult.ToErrorModel("نقش مورد نظر وجود ندارد");
 
                 var userResult = GetUser(model.UserId);
                 if (!userResult.IsSuccess)

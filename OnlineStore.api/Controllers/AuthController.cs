@@ -459,7 +459,23 @@ namespace OnlineStore.api.Controllers
             return addresult;
         }
 
+        [HttpGet]
+        public ApiResult Logout()
+        {
+            try
+            {
+                string userId = GetUser();
+                if (GetUser() == null)
+                    return ApiResult.ToErrorModel("کاربر یافت نشد");
 
+                identityService.SignOut();
+                return ApiResult.ToErrorModel("خروج با موفقیت انجام شد");
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.ToErrorModel("خطا در خروج کاربر", exception: ex.ToString());
+            }
+        }
 
         private string GetUser()
         {

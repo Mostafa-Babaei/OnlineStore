@@ -71,9 +71,11 @@ namespace AppFramework.ServicesConfiguration
                 options.AddPolicy(name: "originList",
                                   policy =>
                                   {
-                                      policy.WithOrigins(setting)
+                                      policy.AllowAnyOrigin()
+                                      //WithOrigins(setting)
                                             .AllowAnyHeader()
-                                            .AllowAnyMethod();
+                                            .AllowCredentials()
+                                            .AllowCredentials();
                                   });
             });
         }

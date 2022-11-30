@@ -30,7 +30,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception)
             {
-                return ApiResult.ToErrorModel(BrandMessages.ReceivedBrandsFailure);
+                return ApiResult.ToErrorModel(BrandMessages.ReceivedBrandsFailure, exception: ex);
             }
         }
 

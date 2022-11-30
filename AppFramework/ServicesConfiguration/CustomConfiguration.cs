@@ -65,7 +65,7 @@ namespace AppFramework.ServicesConfiguration
         public static void AddCross(this IServiceCollection services, IConfiguration Configuration)
         {
 
-            string setting = Configuration.GetSection("SiteSettings").GetSection("OriginWebsite").Value?? "http://localhost:4200";
+            string setting = Configuration.GetSection("SiteSettings").GetSection("OriginWebsite").Value ?? "http://localhost:4200";
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "originList",
@@ -74,8 +74,7 @@ namespace AppFramework.ServicesConfiguration
                                       policy.AllowAnyOrigin()
                                       //WithOrigins(setting)
                                             .AllowAnyHeader()
-                                            .AllowCredentials()
-                                            .AllowCredentials();
+                                            .AllowAnyMethod();
                                   });
             });
         }

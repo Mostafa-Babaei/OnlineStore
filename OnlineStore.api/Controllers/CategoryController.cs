@@ -32,7 +32,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception)
             {
-                return ApiResult.ToErrorModel(CategoryMessages.ReceivedCategoriesFailure);
+                return ApiResult.ToErrorModel(CategoryMessages.ReceivedCategoriesFailure, exception: ex);
             }
         }
 

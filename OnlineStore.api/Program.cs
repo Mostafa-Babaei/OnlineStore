@@ -92,7 +92,7 @@ else
     app.UseSwagger();
     app.UseSwaggerUI(c => { c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None); });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -101,6 +101,6 @@ app.UseStaticFiles();
 app.UseCors("originList");
 
 app.MapControllers();
-infrastructure.Persistence.ApplicationDbContextSeed.Initialize(app.Services);
+//infrastructure.Persistence.ApplicationDbContextSeed.Initialize(app.Services);
 
 app.Run();

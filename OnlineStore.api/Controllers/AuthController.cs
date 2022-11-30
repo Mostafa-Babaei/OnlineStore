@@ -126,7 +126,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError + ex.ToString());
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
             }
         }
 
@@ -161,7 +161,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError + ex.ToString());
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
             }
         }
 
@@ -197,7 +197,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
             }
         }
 
@@ -210,7 +210,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
             }
         }
 
@@ -242,10 +242,18 @@ namespace OnlineStore.api.Controllers
         [HttpGet]
         public ApiResult GetUserRole()
         {
-            string userId = GetUser();
-            if (userId == null)
-                return ApiResult.ToErrorModel("کاربر یافت نشد");
-            return identityService.GetRolesOfUser(userId);
+            try
+            {
+                string userId = GetUser();
+                if (userId == null)
+                    return ApiResult.ToErrorModel("کاربر یافت نشد");
+                return identityService.GetRolesOfUser(userId);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.ToErrorModel("خطا در دریافت نقش کاربر", exception: ex);
+            }
+
         }
 
         /// <summary>

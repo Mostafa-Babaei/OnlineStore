@@ -67,6 +67,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="productId"></param>
         /// <returns></returns>
         [HttpDelete]
+        [Route("{productId}")]
         public ApiResult RemoveItemFromCart(int productId)
         {
             string userId = GetUser();

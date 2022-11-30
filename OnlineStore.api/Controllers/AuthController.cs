@@ -469,7 +469,7 @@ namespace OnlineStore.api.Controllers
                     return ApiResult.ToErrorModel("کاربر یافت نشد");
 
                 identityService.SignOut();
-                return ApiResult.ToErrorModel("خروج با موفقیت انجام شد");
+                return ApiResult.ToSuccessModel("خروج با موفقیت انجام شد");
             }
             catch (Exception ex)
             {

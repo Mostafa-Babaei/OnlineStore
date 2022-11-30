@@ -62,7 +62,7 @@ namespace infrastructure.Identity
                 foreach (var error in result.Errors)
                     errors.Add(error.Description);
 
-                return ApiResult.ToErrorModel("خطا در ثبت کاربر", errors);
+                return ApiResult.ToErrorModel("خطا در ثبت کاربر", Data: errors);
             }
 
             return new ApiResult() { IsSuccess = result.Succeeded, Message = "ثبت نام کاربر با موفقیت انجام شد", Data = user.Id };
@@ -172,28 +172,37 @@ namespace infrastructure.Identity
             var user = _userManager.FindByIdAsync(userId).Result;
             if (user == null)
                 return ApiResult.ToErrorModel("خطا در دریافت اطلاعات کاربر");
-            
+
             return ApiResult.ToSuccessModel("اطلاعات کاربر دریافت شد", user);
 
         }
 
 
-    
+
         public ApiResult SetRoleUser(SetUserRoleDto model)
         {
-            var userResult = GetUser(model.UserId);
-            if (!userResult.IsSuccess)
-                return userResult;
-            ApplicationUser user = (ApplicationUser)userResult.Data;
+            try
+            {
 
-            var result = _userManager.AddToRolesAsync(user, model.Roles).Result;
-            if (!result.Succeeded)
-                return ApiResult.ToErrorModel("خطا ثبت نقش کاربر");
+                var userResult = GetUser(model.UserId);
+                if (!userResult.IsSuccess)
+                    return userResult;
+                ApplicationUser user = (ApplicationUser)userResult.Data;
 
-            return ApiResult.ToSuccessModel("نقش کاربر دریافت شد");
+                var result = _userManager.AddToRolesAsync(user, model.Roles).Result;
+                if (!result.Succeeded)
+                    return ApiResult.ToErrorModel("خطا ثبت نقش کاربر");
+
+                return ApiResult.ToSuccessModel("نقش کاربر دریافت شد");
+            }
+            catch (System.Exception ex)
+            {
+
+                return ApiResult.ToErrorModel("خطا ثبت نقش کاربر", exception: ex.ToString());
+            }
         }
 
-        
+
 
         public string GetErrorMessage(IEnumerable<IdentityError> errors)
         {

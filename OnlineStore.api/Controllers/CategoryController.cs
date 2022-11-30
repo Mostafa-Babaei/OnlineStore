@@ -30,9 +30,9 @@ namespace OnlineStore.api.Controllers
             {
                 return ApiResult.ToSuccessModel(CategoryMessages.ReceivedCategoriesSuccess, categoryService.GetAllCategory());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ApiResult.ToErrorModel(CategoryMessages.ReceivedCategoriesFailure, exception: ex);
+                return ApiResult.ToErrorModel(CategoryMessages.ReceivedCategoriesFailure, exception: ex.ToString());
             }
         }
 

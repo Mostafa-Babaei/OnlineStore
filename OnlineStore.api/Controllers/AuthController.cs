@@ -126,7 +126,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -161,7 +161,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -197,7 +197,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -210,7 +210,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -251,7 +251,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel("خطا در دریافت نقش کاربر", exception: ex);
+                return ApiResult.ToErrorModel("خطا در دریافت نقش کاربر", exception: ex.ToString());
             }
 
         }

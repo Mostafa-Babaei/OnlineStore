@@ -187,7 +187,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel("خطا پیش بینی نشده در بارگذاری تصویر محصول", exception: ex);
+                return ApiResult.ToErrorModel("خطا پیش بینی نشده در بارگذاری تصویر محصول", exception: ex.ToString());
             }
         }
     }

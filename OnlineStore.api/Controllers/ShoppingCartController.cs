@@ -193,7 +193,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel("خطای پیش بینی نشده در ثبت سفارش", exception: ex);
+                return ApiResult.ToErrorModel("خطای پیش بینی نشده در ثبت سفارش", exception: ex.ToString());
             }
         }
 

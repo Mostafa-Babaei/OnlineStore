@@ -28,9 +28,9 @@ namespace OnlineStore.api.Controllers
             {
                 return ApiResult.ToSuccessModel(BrandMessages.ReceivedBrandsSuccess, brandService.GetAllBrand());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ApiResult.ToErrorModel(BrandMessages.ReceivedBrandsFailure, exception: ex);
+                return ApiResult.ToErrorModel(BrandMessages.ReceivedBrandsFailure, exception: ex.ToString());
             }
         }
 

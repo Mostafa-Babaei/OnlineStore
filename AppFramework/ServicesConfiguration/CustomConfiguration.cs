@@ -72,10 +72,10 @@ namespace AppFramework.ServicesConfiguration
                                   policy =>
                                   {
                                       policy.AllowAnyOrigin()
-                                      //WithOrigins(setting)
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                                   });
+                //WithOrigins(setting)
             });
         }
     }

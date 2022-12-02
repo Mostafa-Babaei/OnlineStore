@@ -3,6 +3,7 @@ using Application.Constant.Message;
 using Application.Model;
 using Domain.Entities;
 using infrastructure.Service;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace OnlineStore.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [EnableCors("originList")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService categoryService;

@@ -52,7 +52,8 @@ namespace infrastructure.Identity
                 Fullname = model.Fullname,
                 UserName = model.Email,
                 Email = model.Email,
-                IsActive = model.IsActive
+                IsActive = model.IsActive,
+                Avatar = "UserAvatar.png"
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -371,8 +372,8 @@ namespace infrastructure.Identity
 
             if (!user.IsSuccess)
                 return ApiResult.ToErrorModel(user.Message);
-
-            return ApiResult.ToSuccessModel(user.Message, _userManager.GetRolesAsync((ApplicationUser)user.Data));
+            var roles = _userManager.GetRolesAsync((ApplicationUser)user.Data).Result;
+            return ApiResult.ToSuccessModel(user.Message, roles);
         }
 
         public ApiResult RemoveRoleFromUser(string userId, string roleName)

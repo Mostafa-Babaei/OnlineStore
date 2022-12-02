@@ -3,6 +3,7 @@ using Application.Constant.Message;
 using Application.Model;
 using Domain.Models;
 using infrastructure.Service;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -12,6 +13,7 @@ namespace OnlineStore.api.Controllers
 
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [EnableCors("originList")]
     public class ProductController : ControllerBase
     {
 

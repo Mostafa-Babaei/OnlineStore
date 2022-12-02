@@ -83,7 +83,8 @@ namespace infrastructure.Service
                 PageSize = pageSize
             };
             var orders = orderRepository.GetWithPaging(null, pagingDto);
-//            var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
+            //var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
+            orders.PageData = orders.PageData.OrderByDescending(e => e.CreateAt).ToList();
 
             return ApiResult.ToSuccessModel("", orders);
         }
@@ -98,7 +99,7 @@ namespace infrastructure.Service
             var orders = orderRepository.GetWithPaging(e => e.UserId == userName, pagingDto);
 
             //var result = mapper.Map<List<Domain.Models.ShopOrder>, List<OrderDto>>(orders.PageData);
-
+            orders.PageData = orders.PageData.OrderByDescending(e => e.CreateAt).ToList();
             return ApiResult.ToSuccessModel("", orders);
         }
 

@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineStore.api.Controllers
 {
     [ApiController]
     [Route("[controller]"), Authorize]
+    [EnableCors("originList")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

@@ -2,6 +2,7 @@
 using Application.Model;
 using Domain.Models;
 using infrastructure.Service;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [EnableCors("originList")]
         public ApiResult AddToCart([FromBody] AddToCartDto toCartDto)
         {
             string userId = GetUser();

@@ -6,6 +6,7 @@ using AutoMapper;
 using infrastructure.Identity;
 using infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,7 +20,7 @@ namespace OnlineStore.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    [EnableCors("originList")]
     public class AuthController : ControllerBase
     {
         private readonly IOptions<SiteSetting> option;
@@ -117,6 +118,14 @@ namespace OnlineStore.api.Controllers
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
+                    //string userId = GetUser();
+                    //var roles = identityService.GetRolesOfUser(signinState.Data.ToString()).Data;
+                    //List<string> roles = new List<string>();
+                    //LoginResultDto model = new LoginResultDto()
+                    //{
+                    //    Token = tokenString,
+                    //    Roles = (List<string>)roles
+                    //};
 
                     var appIdentity = new ClaimsIdentity(claims);
                     User.AddIdentity(appIdentity);
@@ -312,7 +321,6 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
         public ApiResult GetCurrentUser()
         {
             string userId = GetUser();
@@ -338,7 +346,6 @@ namespace OnlineStore.api.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
         public ApiResult GetCurrentUserById(string userId)
         {
             var user = identityService.GetUser(userId);
@@ -356,7 +363,6 @@ namespace OnlineStore.api.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public ApiResult UpdateUserById(UserDto user)
         {
 
@@ -395,7 +401,6 @@ namespace OnlineStore.api.Controllers
 
 
         [HttpPut]
-        [Authorize]
         public ApiResult UpdateUser(UserDto user)
         {
             string userId = GetUser();
@@ -415,7 +420,6 @@ namespace OnlineStore.api.Controllers
 
 
         [HttpPost]
-        [Authorize]
         public ApiResult AddAvatar(IFormFile avatar)
         {
             string userId = GetUser();

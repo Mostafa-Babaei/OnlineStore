@@ -2,6 +2,7 @@
 using Application.Constant.Message;
 using Application.Model;
 using infrastructure.Service;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace OnlineStore.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [EnableCors("originList")]
     public class BrandController : ControllerBase
     {
         private readonly IBrandService brandService;
@@ -28,9 +30,9 @@ namespace OnlineStore.api.Controllers
             {
                 return ApiResult.ToSuccessModel(BrandMessages.ReceivedBrandsSuccess, brandService.GetAllBrand());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ApiResult.ToErrorModel(BrandMessages.ReceivedBrandsFailure);
+                return ApiResult.ToErrorModel(BrandMessages.ReceivedBrandsFailure, exception: ex.ToString());
             }
         }
 

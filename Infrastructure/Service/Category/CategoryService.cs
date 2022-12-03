@@ -48,7 +48,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "دریافت ویرایش دسته بندی");
-                return ApiResult.ToErrorModel("خطا در ویرایش دسته بندی");
+                return ApiResult.ToErrorModel("خطا در ویرایش دسته بندی", exception: ex.ToString().ToString());
             }
         }
 
@@ -113,7 +113,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در ثبت دسته بندی");
-                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی");
+                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی", exception: ex.ToString());
             }
         }
 
@@ -134,7 +134,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در حذف دسته بندی");
-                return ApiResult.ToErrorModel("خطا در حذف دسته بندی");
+                return ApiResult.ToErrorModel("خطا در حذف دسته بندی", exception: ex.ToString());
             }
         }
     }

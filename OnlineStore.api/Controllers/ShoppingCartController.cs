@@ -2,6 +2,7 @@
 using Application.Model;
 using Domain.Models;
 using infrastructure.Service;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,7 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [EnableCors("originList")]
         public ApiResult AddToCart([FromBody] AddToCartDto toCartDto)
         {
             string userId = GetUser();
@@ -67,6 +69,7 @@ namespace OnlineStore.api.Controllers
         /// <param name="productId"></param>
         /// <returns></returns>
         [HttpDelete]
+        [Route("{productId}")]
         public ApiResult RemoveItemFromCart(int productId)
         {
             string userId = GetUser();
@@ -193,7 +196,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToErrorModel("خطای پیش بینی نشده در ثبت سفارش");
+                return ApiResult.ToErrorModel("خطای پیش بینی نشده در ثبت سفارش", exception: ex.ToString());
             }
         }
 

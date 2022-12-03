@@ -52,7 +52,8 @@ namespace infrastructure.Identity
                 Fullname = model.Fullname,
                 UserName = model.Email,
                 Email = model.Email,
-                IsActive = model.IsActive
+                IsActive = model.IsActive,
+                Avatar = "UserAvatar.png"
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -62,7 +63,7 @@ namespace infrastructure.Identity
                 foreach (var error in result.Errors)
                     errors.Add(error.Description);
 
-                return ApiResult.ToErrorModel("خطا در ثبت کاربر", errors);
+                return ApiResult.ToErrorModel("خطا در ثبت کاربر", Data: errors);
             }
 
             return new ApiResult() { IsSuccess = result.Succeeded, Message = "ثبت نام کاربر با موفقیت انجام شد", Data = user.Id };
@@ -172,28 +173,39 @@ namespace infrastructure.Identity
             var user = _userManager.FindByIdAsync(userId).Result;
             if (user == null)
                 return ApiResult.ToErrorModel("خطا در دریافت اطلاعات کاربر");
-            
+
             return ApiResult.ToSuccessModel("اطلاعات کاربر دریافت شد", user);
 
         }
 
 
-    
+
         public ApiResult SetRoleUser(SetUserRoleDto model)
         {
-            var userResult = GetUser(model.UserId);
-            if (!userResult.IsSuccess)
-                return userResult;
-            ApplicationUser user = (ApplicationUser)userResult.Data;
+            try
+            {
+                if (roleManager.RoleExistsAsync(model.Roles.First()).Result == false)
+                    return ApiResult.ToErrorModel("نقش مورد نظر وجود ندارد");
 
-            var result = _userManager.AddToRolesAsync(user, model.Roles).Result;
-            if (!result.Succeeded)
-                return ApiResult.ToErrorModel("خطا ثبت نقش کاربر");
+                var userResult = GetUser(model.UserId);
+                if (!userResult.IsSuccess)
+                    return userResult;
+                ApplicationUser user = (ApplicationUser)userResult.Data;
 
-            return ApiResult.ToSuccessModel("نقش کاربر دریافت شد");
+                var result = _userManager.AddToRolesAsync(user, model.Roles).Result;
+                if (!result.Succeeded)
+                    return ApiResult.ToErrorModel("خطا ثبت نقش کاربر");
+
+                return ApiResult.ToSuccessModel("نقش کاربر دریافت شد");
+            }
+            catch (System.Exception ex)
+            {
+
+                return ApiResult.ToErrorModel("خطا ثبت نقش کاربر", exception: ex.ToString());
+            }
         }
 
-        
+
 
         public string GetErrorMessage(IEnumerable<IdentityError> errors)
         {
@@ -360,8 +372,8 @@ namespace infrastructure.Identity
 
             if (!user.IsSuccess)
                 return ApiResult.ToErrorModel(user.Message);
-
-            return ApiResult.ToSuccessModel(user.Message, _userManager.GetRolesAsync((ApplicationUser)user.Data));
+            var roles = _userManager.GetRolesAsync((ApplicationUser)user.Data).Result;
+            return ApiResult.ToSuccessModel(user.Message, roles);
         }
 
         public ApiResult RemoveRoleFromUser(string userId, string roleName)

@@ -11,6 +11,7 @@ namespace Application.Common.Model
         public bool IsSuccess { get; set; }
         public object Data { get; set; }
         public string Message { get; set; }
+        public string Exception { get; set; }
 
         public static ApiResult ToSuccessModel()
         {
@@ -24,10 +25,20 @@ namespace Application.Common.Model
         {
             return new ApiResult() { IsSuccess = true, Message = Message, Data = Data };
         }
+
         public static ApiResult ToErrorModel(string Message, object Data)
         {
             return new ApiResult() { IsSuccess = false, Message = Message, Data = Data };
         }
+        public static ApiResult ToErrorModel(string Message, object Data, string exception)
+        {
+            return new ApiResult() { IsSuccess = false, Message = Message, Data = Data, Exception = exception };
+        }
+        public static ApiResult ToErrorModel(string Message, string exception)
+        {
+            return new ApiResult() { IsSuccess = false, Message = Message, Exception = exception };
+        }
+
         public static ApiResult ToErrorModel(string Message)
         {
             return new ApiResult() { IsSuccess = false, Message = Message };

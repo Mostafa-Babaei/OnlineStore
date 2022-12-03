@@ -8,22 +8,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using infrastructure.Identity;
 
 namespace OnlineStore.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [EnableCors("originList")]
     public class OrderController : ControllerBase
     {
         private readonly IShoppingCartService shoppingCartService;
         private readonly IShopOrderService OrderService;
         private readonly IProductService productService;
+        private readonly IIdentityService identityService;
 
-        public OrderController(IShoppingCartService shoppingCartService, IShopOrderService OrderService, IProductService productService)
+        public OrderController(IShoppingCartService shoppingCartService, IShopOrderService OrderService, IProductService productService, IIdentityService identityService)
         {
             this.shoppingCartService = shoppingCartService;
             this.OrderService = OrderService;
             this.productService = productService;
+            this.identityService = identityService;
         }
 
         /// <summary>
@@ -76,9 +81,10 @@ namespace OnlineStore.api.Controllers
         /// <param name="count"></param>
         /// <returns></returns>
         [HttpGet]
-        public ApiResult GetOrders(int? page = 1, int? count = 10)
+        public ApiResult GetOrders(int? page, int? count)
         {
-            return  OrderService.GetOrders(page.Value, count.Value);
+
+            return OrderService.GetOrders(page ?? 1, count ?? 10);
         }
 
         /// <summary>
@@ -93,7 +99,7 @@ namespace OnlineStore.api.Controllers
             string userId = GetUser();
             if (GetUser() == null)
                 return ApiResult.ToErrorModel("کاربر یافت نشد");
-            return  OrderService.GetUserOrders(userId, page.Value, count.Value);
+            return OrderService.GetUserOrders(userId, page.Value, count.Value);
         }
 
         /// <summary>
@@ -108,10 +114,12 @@ namespace OnlineStore.api.Controllers
             string userId = GetUser();
             if (GetUser() == null)
                 return ApiResult.ToErrorModel("کاربر یافت نشد");
+            bool isAdmin = identityService.IsInRoleAsync(userId, "Admin").Result;
 
             //بررسی مالکیت سفارش
-            if (!OrderService.OrderForUser(orderNumber, userId))
+            if (!OrderService.OrderForUser(orderNumber, userId) && !isAdmin)
                 return ApiResult.ToErrorModel("سفارش متعلق به شما نیست");
+
             OrderDto orderDto = OrderService.GetOrderDto(orderNumber);
 
             //اطلاعات محصول

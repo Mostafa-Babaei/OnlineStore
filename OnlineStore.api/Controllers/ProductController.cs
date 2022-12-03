@@ -3,6 +3,7 @@ using Application.Constant.Message;
 using Application.Model;
 using Domain.Models;
 using infrastructure.Service;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -12,6 +13,7 @@ namespace OnlineStore.api.Controllers
 
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [EnableCors("originList")]
     public class ProductController : ControllerBase
     {
 
@@ -185,9 +187,9 @@ namespace OnlineStore.api.Controllers
                 return ApiResult.ToSuccessModel("تصویر محصول با موفقیت بارگذاری شد");
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return ApiResult.ToErrorModel("خطا پیش بینی نشده در بارگذاری تصویر محصول");
+                return ApiResult.ToErrorModel("خطا پیش بینی نشده در بارگذاری تصویر محصول", exception: ex.ToString());
             }
         }
     }

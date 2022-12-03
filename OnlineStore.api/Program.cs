@@ -3,6 +3,7 @@ using Application.Common;
 using AutoMapper;
 using infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -12,13 +13,12 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
-
 //کانفیگ کانتکس
 builder.Services.AddDbContextConfiguration(configuration);
 builder.Services.AddIdentityService();
 builder.Services.AddServices();
 builder.Services.AutoMapperConfig();
-builder.Services.AddCross();
+builder.Services.AddCross(configuration);
 
 
 //تنظیمات اعتبار سنجی swagger
@@ -83,17 +83,24 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+}
     app.UseSwagger();
     app.UseSwaggerUI(c => { c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None); });
-}
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseStaticFiles();
+app.UseCors("originList");
 
 app.MapControllers();
-app.UseCors("originList");
+//infrastructure.Persistence.ApplicationDbContextSeed.Initialize(app.Services);
+
 app.Run();

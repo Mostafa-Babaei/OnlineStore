@@ -57,7 +57,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در ثبت دسته بندی");
-                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی");
+                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی", exception: ex.ToString());
             }
         }
 
@@ -78,7 +78,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در ثبت دسته بندی");
-                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی");
+                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی", exception: ex.ToString());
             }
         }
 
@@ -98,7 +98,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در ثبت دسته بندی");
-                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی");
+                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی", exception: ex.ToString());
             }
         }
 
@@ -140,7 +140,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در ثبت دسته بندی");
-                return ApiResult.ToErrorModel("خطا در حذف");
+                return ApiResult.ToErrorModel("خطا در حذف", exception: ex.ToString());
             }
         }
 
@@ -175,7 +175,7 @@ namespace infrastructure.Service
             catch (Exception ex)
             {
                 //logger.LogError(ex, "خطا در ثبت دسته بندی");
-                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی");
+                return ApiResult.ToErrorModel("خطا در ثبت دسته بندی", exception: ex.ToString());
             }
         }
 

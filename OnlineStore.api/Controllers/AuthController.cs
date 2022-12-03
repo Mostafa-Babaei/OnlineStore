@@ -6,6 +6,7 @@ using AutoMapper;
 using infrastructure.Identity;
 using infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,7 +20,7 @@ namespace OnlineStore.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    [EnableCors("originList")]
     public class AuthController : ControllerBase
     {
         private readonly IOptions<SiteSetting> option;
@@ -117,6 +118,14 @@ namespace OnlineStore.api.Controllers
                     );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
+                    //string userId = GetUser();
+                    //var roles = identityService.GetRolesOfUser(signinState.Data.ToString()).Data;
+                    //List<string> roles = new List<string>();
+                    //LoginResultDto model = new LoginResultDto()
+                    //{
+                    //    Token = tokenString,
+                    //    Roles = (List<string>)roles
+                    //};
 
                     var appIdentity = new ClaimsIdentity(claims);
                     User.AddIdentity(appIdentity);
@@ -126,7 +135,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -161,7 +170,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -197,7 +206,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -210,7 +219,7 @@ namespace OnlineStore.api.Controllers
             }
             catch (Exception ex)
             {
-                return ApiResult.ToSuccessModel(CommonMessage.UnhandledError);
+                return ApiResult.ToErrorModel(CommonMessage.UnhandledError, exception: ex.ToString());
             }
         }
 
@@ -242,10 +251,18 @@ namespace OnlineStore.api.Controllers
         [HttpGet]
         public ApiResult GetUserRole()
         {
-            string userId = GetUser();
-            if (userId == null)
-                return ApiResult.ToErrorModel("کاربر یافت نشد");
-            return identityService.GetRolesOfUser(userId);
+            try
+            {
+                string userId = GetUser();
+                if (userId == null)
+                    return ApiResult.ToErrorModel("کاربر یافت نشد");
+                return identityService.GetRolesOfUser(userId);
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.ToErrorModel("خطا در دریافت نقش کاربر", exception: ex.ToString());
+            }
+
         }
 
         /// <summary>
@@ -304,7 +321,6 @@ namespace OnlineStore.api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
         public ApiResult GetCurrentUser()
         {
             string userId = GetUser();
@@ -330,7 +346,6 @@ namespace OnlineStore.api.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
         public ApiResult GetCurrentUserById(string userId)
         {
             var user = identityService.GetUser(userId);
@@ -348,7 +363,6 @@ namespace OnlineStore.api.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public ApiResult UpdateUserById(UserDto user)
         {
 
@@ -387,7 +401,6 @@ namespace OnlineStore.api.Controllers
 
 
         [HttpPut]
-        [Authorize]
         public ApiResult UpdateUser(UserDto user)
         {
             string userId = GetUser();
@@ -407,7 +420,6 @@ namespace OnlineStore.api.Controllers
 
 
         [HttpPost]
-        [Authorize]
         public ApiResult AddAvatar(IFormFile avatar)
         {
             string userId = GetUser();
@@ -451,7 +463,23 @@ namespace OnlineStore.api.Controllers
             return addresult;
         }
 
+        [HttpGet]
+        public ApiResult Logout()
+        {
+            try
+            {
+                string userId = GetUser();
+                if (GetUser() == null)
+                    return ApiResult.ToErrorModel("کاربر یافت نشد");
 
+                identityService.SignOut();
+                return ApiResult.ToSuccessModel("خروج با موفقیت انجام شد");
+            }
+            catch (Exception ex)
+            {
+                return ApiResult.ToErrorModel("خطا در خروج کاربر", exception: ex.ToString());
+            }
+        }
 
         private string GetUser()
         {
